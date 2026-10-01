@@ -10,7 +10,7 @@ export function SiteFooter() {
             CLUB<span className="text-primary">APP</span>
           </p>
           <p className="mt-1 text-sm text-navy-muted">Tu club, en regla.</p>
-          <p className="mt-4 text-sm text-navy-muted">Fundación D.C Tumaco · Colombia</p>
+          <p className="mt-4 text-sm text-navy-muted">CLUBAPP-COLOMBIA · Colombia</p>
           <p className="text-sm text-navy-muted">{CONFIG.EMAIL}</p>
         </div>
 

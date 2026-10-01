@@ -19,6 +19,8 @@ export const Route = createFileRoute("/plan-profesional")({
         property: "og:description",
         content: "Entrega en 24 horas: ClubApp diligencia los documentos de tu club. Pago por WhatsApp.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PlanPage,

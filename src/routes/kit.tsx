@@ -21,6 +21,8 @@ export const Route = createFileRoute("/kit")({
         content:
           "Los 10 documentos que tu club necesita, en Word editable, con guía paso a paso. $40.000 COP, pago único.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: KitPage,

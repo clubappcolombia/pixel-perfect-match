@@ -21,6 +21,8 @@ export const Route = createFileRoute("/")({
         content:
           "Documentos listos para formalizar tu club deportivo en Colombia. Kit de autogestión o Plan Profesional con entrega en 24 horas.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
