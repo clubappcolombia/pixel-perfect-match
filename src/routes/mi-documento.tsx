@@ -11,6 +11,8 @@ export const Route = createFileRoute("/mi-documento")({
       { name: "description", content: "Consulta con tu correo el estado de entrega de tus documentos ClubApp." },
       { property: "og:title", content: "Mi documento — ClubApp" },
       { property: "og:description", content: "Revisa si tus documentos ya están listos para descargar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: MiDocumento,
