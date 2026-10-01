@@ -3,16 +3,17 @@
 
 export const CONFIG = {
   /** Número de WhatsApp en formato internacional sin "+" (Colombia = 57...). */
-  WHATSAPP_NUMBER: "573000000000",
+  WHATSAPP_NUMBER: "573152803830",
   /** Formulario del club (Google Forms) usado en el paso 2 del Plan. */
-  FORM_URL: "https://docs.google.com/forms/",
+  FORM_URL:
+    "https://docs.google.com/forms/d/e/1FAIpQLSfWG5aEpYMIDKafHs392dmv8P0ssLrKaTaHPsIJ2rrDKrGnaA/viewform",
   /** Endpoint de Apps Script que registra solicitudes en la hoja. null = solo local. */
   FORM_ENDPOINT: null as string | null,
   /** Endpoint que consulta el estado de entrega por correo. null = solo local. */
   DOWNLOAD_ENDPOINT: null as string | null,
   PRICE_KIT: 40000,
   PRICE_PLAN: 150000,
-  EMAIL: "contacto@clubapp.co",
+  EMAIL: "clubappcolombia@gmail.com",
 } as const;
 
 export const LEGAL_NOTICE =
