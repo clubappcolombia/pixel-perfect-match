@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDown, Check } from "lucide-react";
 import { KitModal } from "@/components/kit-modal";
-import { Button, ButtonRoute, Card } from "@/components/ui-kit";
+import { Button, ButtonRoute, Card, Steps } from "@/components/ui-kit";
 import { CONFIG, LEGAL_NOTICE, formatCOP, trackEvent } from "@/lib/config";
 
 export const Route = createFileRoute("/kit")({
@@ -127,19 +127,14 @@ function KitPage() {
       <section className="section bg-secondary">
         <div className="container-page">
           <h2 className="text-3xl">Cómo funciona</h2>
-          <ol className="mt-6 grid gap-4 md:grid-cols-4">
-            {[
+          <Steps
+            items={[
               "Pulsas “Comprar mi kit” y dejas tus datos.",
               "Se abre WhatsApp con tu mensaje listo.",
               "Te indicamos los medios de pago y envías el comprobante.",
               "Confirmamos el pago y te entregamos el kit.",
-            ].map((s, i) => (
-              <li key={s} className="rounded-2xl border bg-card p-5 shadow-card">
-                <span className="font-display text-3xl text-primary">{i + 1}</span>
-                <p className="mt-2 text-sm text-muted-foreground">{s}</p>
-              </li>
-            ))}
-          </ol>
+            ]}
+          />
         </div>
       </section>
 

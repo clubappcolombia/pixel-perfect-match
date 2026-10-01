@@ -53,12 +53,53 @@ export function ButtonRoute({
   return <Link className={cn(buttonStyles({ variant, size }), className)} {...props} />;
 }
 
-export function Card({ className, ...props }: ComponentProps<"div">) {
+export function Card({
+  className,
+  interactive,
+  ...props
+}: ComponentProps<"div"> & { interactive?: boolean }) {
   return (
     <div
-      className={cn("rounded-2xl border bg-card p-6 text-card-foreground shadow-card", className)}
+      className={cn(
+        "rounded-2xl border bg-card p-6 text-card-foreground shadow-card",
+        interactive && "transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift",
+        className,
+      )}
       {...props}
     />
+  );
+}
+
+export function SectionHeading({
+  eyebrow,
+  title,
+  children,
+  className,
+}: {
+  eyebrow?: string;
+  title: string;
+  children?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("max-w-2xl", className)}>
+      {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
+      <h2 className={cn("text-3xl md:text-4xl", eyebrow && "mt-3")}>{title}</h2>
+      {children ? <p className="mt-3 text-muted-foreground">{children}</p> : null}
+    </div>
+  );
+}
+
+export function Steps({ items, className }: { items: string[]; className?: string }) {
+  return (
+    <ol className={cn("mt-6 grid gap-5 md:grid-cols-4", className)}>
+      {items.map((step, i) => (
+        <li key={step} className="rounded-2xl border bg-card p-5 shadow-card">
+          <span className="font-display text-3xl text-primary">{i + 1}</span>
+          <p className="mt-2 text-sm text-muted-foreground">{step}</p>
+        </li>
+      ))}
+    </ol>
   );
 }
 
