@@ -15,6 +15,8 @@ export const CONFIG = {
   SITE_URL: "https://pixel-perfect-render-0992.lovable.app" as string | null,
   /** Campo del correo en Google Forms (ej. "entry.123456789") para que el formulario llegue con el correo ya escrito. null = sin autocompletar. */
   FORM_EMAIL_ENTRY: null as string | null,
+  /** ID de medición de Google Analytics 4 (empieza por "G-"). Solo se carga si el visitante acepta las cookies. null = sin analítica. */
+  GA_ID: "G-N24HZ4DV1E" as string | null,
   /** ID de Google Tag Manager (ej. "GTM-ABC1234"). null = sin analítica. */
   GTM_ID: null as string | null,
 } as const;
@@ -135,7 +137,12 @@ export function formatCodigo(codigo: string) {
 
 export function trackEvent(name: string, payload?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
-  const w = window as unknown as { dataLayer?: unknown[] };
-  w.dataLayer = w.dataLayer ?? [];
-  w.dataLayer.push({ event: name, ...payload });
+  const w = window as unknown as { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void };
+  // Tag Manager (solo si se configura GTM_ID).
+  if (CONFIG.GTM_ID) {
+    w.dataLayer = w.dataLayer ?? [];
+    w.dataLayer.push({ event: name, ...payload });
+  }
+  // Google Analytics 4: window.gtag solo existe si el visitante aceptó las cookies de analítica.
+  w.gtag?.("event", name, payload ?? {});
 }

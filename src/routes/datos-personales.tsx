@@ -42,6 +42,11 @@ function Datos() {
           Para operar el servicio usamos proveedores tecnológicos (como Google y Supabase) que almacenan la información por encargo nuestro y
           pueden hacerlo en servidores ubicados fuera de Colombia.
         </p>
+        <h2 className="text-2xl text-foreground">Cookies y analítica</h2>
+        <p>
+          Con tu autorización usamos Google Analytics para medir visitas y clics (por ejemplo, cuántas personas piden un plan). No guardamos
+          tu nombre, correo ni WhatsApp en la analítica. Si rechazas las cookies, no se carga y el sitio funciona igual.
+        </p>
         <h2 className="text-2xl text-foreground">Conservación</h2>
         <p>
           Conservamos los datos solo el tiempo necesario para entregar el servicio y atender reclamos. Puedes pedirnos en cualquier momento
