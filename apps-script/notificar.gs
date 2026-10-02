@@ -9,6 +9,8 @@ const TOKEN = 'CAMBIA_ESTE_TOKEN';                       // invéntate una clave
 const DUENO = 'clubappcolombia@gmail.com';
 const SITIO = 'https://TU-SITIO.lovable.app';            // enlace público de tu sitio
 
+function fmt(c) { return c && c.length === 10 ? c.slice(0, 5) + '-' + c.slice(5) : (c || ''); }
+
 function doPost(e) {
   if (!e.parameter || e.parameter.token !== TOKEN) {
     return ContentService.createTextOutput('no autorizado');
@@ -21,7 +23,7 @@ function doPost(e) {
     MailApp.sendEmail(
       DUENO,
       'Nueva solicitud ClubApp (' + r.plan + ')',
-      'Nombre: ' + r.nombre + '\nCorreo: ' + r.correo + '\nWhatsApp: ' + r.whatsapp + '\nPlan: ' + r.plan
+      'Nombre: ' + r.nombre + '\nCorreo: ' + r.correo + '\nWhatsApp: ' + r.whatsapp + '\nPlan: ' + r.plan + '\nCódigo: ' + fmt(r.codigo_acceso)
     );
   }
 
@@ -40,7 +42,7 @@ function doPost(e) {
         'Tus documentos de ClubApp están listos',
         'Hola ' + r.nombre + ',\n\nTus documentos ya están listos. Descárgalos aquí:\n' + r.url_documento +
           (SITIO.indexOf('TU-SITIO') === -1
-          ? '\n\nTambién puedes consultarlos en ' + SITIO + '/mi-documento con tu correo y los 4 últimos dígitos de tu WhatsApp.'
+          ? '\n\nTambién puedes consultarlos en ' + SITIO + '/mi-documento con tu correo y tu código de seguimiento: ' + fmt(r.codigo_acceso) + '.'
           : '') +
           '\n\nRecuerda: ClubApp es una herramienta de apoyo documental; revisa los requisitos de tu instituto municipal de deportes.' +
           '\n\nClubApp Colombia',

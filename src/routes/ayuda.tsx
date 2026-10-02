@@ -23,7 +23,7 @@ const faqs = [
   ["¿Qué incluye cada plan?", "Kit: un documento Word editable con los 10 formatos y la guía de diligenciamiento en PDF; tú los llenas. Plan Profesional: nosotros diligenciamos los documentos con los datos de tu club. Premium: servicio completo con revisión integral y carpeta lista para radicar."],
   ["¿Cuánto se demora?", "El Kit se entrega apenas confirmamos tu pago. El Plan Profesional, en máximo 24 horas después de confirmarlo. El Premium depende de la información de tu club."],
   ["¿Qué plan me conviene?", "Haz el diagnóstico gratuito: en un minuto te recomendamos el plan adecuado."],
-  ["¿Dónde veo mis documentos?", "En la página “Mi documento”, con el correo que registraste y los 4 últimos dígitos de tu WhatsApp. También te llega un enlace por correo electrónico."],
+  ["¿Dónde veo mis documentos?", "En la página “Mi documento”, con el correo que registraste y tu código de seguimiento (te lo mostramos al registrar la solicitud). También te llega un enlace por correo electrónico. Si perdiste el código, escríbenos por WhatsApp."],
 ];
 
 function Ayuda() {

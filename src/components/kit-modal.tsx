@@ -2,6 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, conDatos, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+import { CodigoAcceso } from "./codigo-acceso";
 import { SolicitudForm } from "./solicitud-form";
 import { ButtonLink } from "./ui-kit";
 
@@ -14,7 +15,7 @@ export function KitModal({
   onOpenChange: (v: boolean) => void;
   producto?: "Kit" | "Premium";
 }) {
-  const [enviado, setEnviado] = useState<{ nombre: string; mensaje: string } | null>(null);
+  const [enviado, setEnviado] = useState<{ nombre: string; mensaje: string; codigo: string | null } | null>(null);
   const premium = producto === "Premium";
   const titulo = premium
     ? `Solicitar el Plan Premium · ${formatCOP(CONFIG.PRICE_PREMIUM)}`
@@ -55,6 +56,7 @@ export function KitModal({
                   pago y los siguientes pasos.
                 </p>
               </div>
+              {enviado.codigo ? <CodigoAcceso codigo={enviado.codigo} /> : null}
               <ButtonLink
                 variant="whatsapp"
                 size="lg"
@@ -80,6 +82,7 @@ export function KitModal({
                   setEnviado({
                     nombre: data.nombre.split(" ")[0] ?? data.nombre,
                     mensaje: conDatos(premium ? WA_MESSAGES.premium : WA_MESSAGES.kit, data),
+                    codigo: data.codigo ?? null,
                   });
                 }}
               />

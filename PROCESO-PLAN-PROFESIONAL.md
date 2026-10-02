@@ -16,7 +16,9 @@
 4. En `src/lib/config.ts` pon: `FORM_EMAIL_ENTRY: "entry.123456789",`
 
 ### B. Base de datos
-En Supabase → SQL Editor → pega el contenido de `supabase/migrations/20261003000000_plan_progreso.sql` → Run.
+En Supabase → SQL Editor, ejecuta en orden (cada una con Run): `20261003000000_plan_progreso.sql`, `20261004000000_antispam.sql` y `20261005000000_codigo_acceso.sql`.
+
+Si un cliente perdió su código: Table Editor → `solicitudes` → busca por correo → copia `codigo_acceso` y envíaselo por WhatsApp.
 
 ### C. Avisos por correo (opcional, 10 minutos)
 1. Entra a script.google.com con la cuenta clubappcolombia@gmail.com → **Nuevo proyecto**.
@@ -51,4 +53,4 @@ Estas últimas personas son buenos candidatos para un recordatorio por WhatsApp.
 4. Pega el enlace en `url_documento` y pulsa Enter.
 5. Cambia `estado` a `entregado` (si quieres, antes a `pago confirmado`).
 6. Comprueba que al cliente le llegó el correo (revisa Spam) o avísale por WhatsApp.
-7. Verifica en `/mi-documento` con su correo y los 4 últimos dígitos de su WhatsApp.
+7. Verifica en `/mi-documento` con su correo y su código de seguimiento (columna `codigo_acceso` en `solicitudes`).

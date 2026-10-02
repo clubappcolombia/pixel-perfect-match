@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Check, ExternalLink } from "lucide-react";
+import { CodigoAcceso } from "@/components/codigo-acceso";
 import { SolicitudForm, type SolicitudData } from "@/components/solicitud-form";
 import { Button, ButtonLink, ButtonRoute, Card } from "@/components/ui-kit";
 import {
@@ -133,6 +134,11 @@ function PlanPage() {
                   Completa el formulario con la información del club y de sus integrantes (incluye
                   cédulas). Usa el mismo correo: <strong>{p.datos?.correo}</strong>.
                 </p>
+                {p.datos?.codigo ? (
+                  <div className="mt-4">
+                    <CodigoAcceso codigo={p.datos.codigo} />
+                  </div>
+                ) : null}
                 <div className="mt-5 flex flex-col gap-3">
                   <ButtonLink
                     href={formUrl(p.datos?.correo)}
@@ -197,6 +203,11 @@ function PlanPage() {
                     horas en <strong>{p.datos?.correo}</strong> y en “Mi documento”.
                   </p>
                 </div>
+                {p.datos?.codigo ? (
+                  <div className="mt-4">
+                    <CodigoAcceso codigo={p.datos.codigo} />
+                  </div>
+                ) : null}
                 <ButtonRoute to="/mi-documento" variant="outline" className="mt-5 w-full">
                   Consultar el estado de mi entrega
                 </ButtonRoute>

@@ -10,6 +10,8 @@ export interface SolicitudData {
   nombre: string;
   whatsapp: string;
   correo: string;
+  /** Código de seguimiento (null si el guardado falló o fue bloqueado). */
+  codigo?: string | null;
 }
 
 export function SolicitudForm({
@@ -46,9 +48,9 @@ export function SolicitudForm({
       whatsapp: result.data.whatsapp,
       correo: result.data.correo,
     };
-    if (!trampa) await guardarSolicitud({ ...clean, producto });
+    const guardada = trampa ? null : await guardarSolicitud({ ...clean, producto });
     setLoading(false);
-    onSuccess(clean);
+    onSuccess({ ...clean, codigo: guardada?.codigo ?? null });
   }
 
   return (

@@ -62,25 +62,33 @@ export interface Solicitud {
   whatsapp: string;
   correo: string;
   estado: "solicitado" | "pago confirmado" | "entregado";
+  /** Código de seguimiento que genera el servidor; null si no se pudo guardar. */
+  codigo: string | null;
 }
 
 /** Guarda la solicitud en Supabase. Si falla, el flujo sigue por WhatsApp con los datos en el mensaje. */
 export async function guardarSolicitud(
-  data: Omit<Solicitud, "fecha" | "estado">,
+  data: Omit<Solicitud, "fecha" | "estado" | "codigo">,
 ): Promise<Solicitud> {
-  const solicitud: Solicitud = { ...data, fecha: new Date().toISOString(), estado: "solicitado" };
+  const solicitud: Solicitud = {
+    ...data,
+    fecha: new Date().toISOString(),
+    estado: "solicitado",
+    codigo: null,
+  };
 
   try {
     const { supabase } = await import("@/integrations/supabase/client");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase as any).from("solicitudes").insert({
-      nombre: solicitud.nombre,
-      correo: solicitud.correo,
-      whatsapp: solicitud.whatsapp,
-      plan: solicitud.producto === "Kit" ? "kit" : solicitud.producto === "Premium" ? "premium" : "profesional",
+    const { data: codigo, error } = await (supabase as any).rpc("crear_solicitud", {
+      p_nombre: solicitud.nombre,
+      p_correo: solicitud.correo,
+      p_whatsapp: solicitud.whatsapp,
+      p_plan: solicitud.producto === "Kit" ? "kit" : solicitud.producto === "Premium" ? "premium" : "profesional",
     });
     // supabase-js NO lanza excepción cuando falla: devuelve { error }.
     if (error) throw error;
+    solicitud.codigo = typeof codigo === "string" ? codigo : null;
   } catch (err) {
     // El flujo continúa por WhatsApp (el mensaje lleva los datos del cliente).
     console.error("[ClubApp] No se pudo guardar la solicitud en Supabase:", err);
@@ -92,22 +100,28 @@ export async function guardarSolicitud(
 
 /** Avisa a Supabase en qué paso va el cliente del Plan Profesional (no cambia el estado: eso lo decides tú). */
 export async function registrarProgreso(
-  d: { correo: string; whatsapp: string },
+  d: { correo: string; codigo?: string | null },
   evento: "formulario_completado" | "comprobante_enviado",
 ) {
+  // Sin código (solicitud guardada antes de esta versión o con fallo de guardado) no hay seguimiento.
+  if (!d.codigo) return;
   try {
     const { supabase } = await import("@/integrations/supabase/client");
-    const whatsapp4 = d.whatsapp.replace(/\D/g, "").slice(-4);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any).rpc("registrar_progreso", {
       p_correo: d.correo,
-      p_whatsapp4: whatsapp4,
+      p_codigo: d.codigo,
       p_evento: evento,
     });
     if (error) throw error;
   } catch (err) {
     console.error("[ClubApp] No se pudo registrar el progreso:", err);
   }
+}
+
+/** Muestra el código con guion para leerlo fácil: 3F9A0C7B21 -> 3F9A0-C7B21 */
+export function formatCodigo(codigo: string) {
+  return codigo.length === 10 ? `${codigo.slice(0, 5)}-${codigo.slice(5)}` : codigo;
 }
 
 export function trackEvent(name: string, payload?: Record<string, unknown>) {
