@@ -12,7 +12,7 @@ export const CONFIG = {
   PRICE_PREMIUM: 300000,
   EMAIL: "clubappcolombia@gmail.com",
   /** Enlace público del sitio, sin "/" al final (ej. "https://tu-sitio.lovable.app"). Sirve para la imagen al compartir el enlace. null = sin imagen. */
-  SITE_URL: null as string | null,
+  SITE_URL: "https://pixel-perfect-render-0992.lovable.app" as string | null,
   /** Campo del correo en Google Forms (ej. "entry.123456789") para que el formulario llegue con el correo ya escrito. null = sin autocompletar. */
   FORM_EMAIL_ENTRY: null as string | null,
   /** ID de Google Tag Manager (ej. "GTM-ABC1234"). null = sin analítica. */
