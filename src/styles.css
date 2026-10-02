@@ -2,6 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
 /*
  * Sistema de diseño ClubApp — azul marino / naranja / blanco.
  * Todos los colores son tokens semánticos en oklch.
@@ -24,7 +26,6 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary-text: var(--primary-text);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -54,8 +55,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.26 0.05 260);
   --primary: oklch(0.67 0.196 45);
-  --primary-foreground: oklch(0.27 0.055 260);
-  --primary-text: oklch(0.52 0.17 45);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0.008 250);
   --secondary-foreground: oklch(0.26 0.05 260);
   --muted: oklch(0.965 0.006 250);

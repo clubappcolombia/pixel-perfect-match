@@ -1,16 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { useState } from "react";
-import {
-  CONFIG,
-  LEGAL_NOTICE,
-  WA_MESSAGES,
-  conDatos,
-  formatCOP,
-  trackEvent,
-  whatsappLink,
-} from "@/lib/config";
-import { SolicitudForm, type SolicitudData } from "./solicitud-form";
+import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+import { SolicitudForm } from "./solicitud-form";
 import { ButtonLink } from "./ui-kit";
 
 export function KitModal({
@@ -20,7 +12,7 @@ export function KitModal({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const [enviado, setEnviado] = useState<SolicitudData | null>(null);
+  const [enviado, setEnviado] = useState<{ nombre: string } | null>(null);
 
   return (
     <Dialog.Root
@@ -53,7 +45,7 @@ export function KitModal({
           {enviado ? (
             <div className="space-y-4">
               <div className="rounded-xl border border-success/30 bg-success/10 p-4 text-sm">
-                <p className="font-semibold">¡Listo, {enviado.nombre.split(" ")[0] ?? enviado.nombre}!</p>
+                <p className="font-semibold">¡Listo, {enviado.nombre}!</p>
                 <p className="mt-1 text-muted-foreground">
                   Registramos tu solicitud. Continúa por WhatsApp: allí te indicamos los medios de
                   pago y, al confirmar tu comprobante, te enviamos el kit.
@@ -63,7 +55,7 @@ export function KitModal({
                 variant="whatsapp"
                 size="lg"
                 className="w-full"
-                href={whatsappLink(conDatos(WA_MESSAGES.kit, enviado))}
+                href={whatsappLink(WA_MESSAGES.kit)}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("WhatsAppClick", { origen: "modal_kit" })}
@@ -81,7 +73,7 @@ export function KitModal({
                 submitLabel="Continuar por WhatsApp"
                 onSuccess={(data) => {
                   trackEvent("Lead", { producto: "Kit" });
-                  setEnviado(data);
+                  setEnviado({ nombre: data.nombre.split(" ")[0] ?? data.nombre });
                 }}
               />
             </>
