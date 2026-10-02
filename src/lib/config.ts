@@ -7,10 +7,6 @@ export const CONFIG = {
   /** Formulario del club (Google Forms) usado en el paso 2 del Plan. */
   FORM_URL:
     "https://docs.google.com/forms/d/e/1FAIpQLSfWG5aEpYMIDKafHs392dmv8P0ssLrKaTaHPsIJ2rrDKrGnaA/viewform",
-  /** Endpoint de Apps Script que registra solicitudes en la hoja. null = solo local. */
-  FORM_ENDPOINT: null as string | null,
-  /** Endpoint que consulta el estado de entrega por correo. null = solo local. */
-  DOWNLOAD_ENDPOINT: null as string | null,
   PRICE_KIT: 50000,
   PRICE_PLAN: 160000,
   PRICE_PREMIUM: 300000,
@@ -57,7 +53,7 @@ export function conDatos(base: string, d: { nombre: string; correo: string; what
   return `${base} Mis datos: ${d.nombre}, ${d.correo}, ${d.whatsapp}.`;
 }
 
-export type SolicitudProducto = "Kit" | "Plan";
+export type SolicitudProducto = "Kit" | "Plan" | "Premium";
 
 export interface Solicitud {
   fecha: string;
@@ -68,20 +64,11 @@ export interface Solicitud {
   estado: "solicitado" | "pago confirmado" | "entregado";
 }
 
-/** Guarda la solicitud localmente y, si hay endpoint, también en la hoja. */
+/** Guarda la solicitud en Supabase. Si falla, el flujo sigue por WhatsApp con los datos en el mensaje. */
 export async function guardarSolicitud(
   data: Omit<Solicitud, "fecha" | "estado">,
 ): Promise<Solicitud> {
   const solicitud: Solicitud = { ...data, fecha: new Date().toISOString(), estado: "solicitado" };
-
-  try {
-    const key = "clubapp:solicitudes";
-    const prev = JSON.parse(localStorage.getItem(key) ?? "[]") as Solicitud[];
-    localStorage.setItem(key, JSON.stringify([...prev, solicitud]));
-    localStorage.setItem("clubapp:correo", solicitud.correo);
-  } catch {
-    /* almacenamiento no disponible */
-  }
 
   try {
     const { supabase } = await import("@/integrations/supabase/client");
@@ -90,7 +77,7 @@ export async function guardarSolicitud(
       nombre: solicitud.nombre,
       correo: solicitud.correo,
       whatsapp: solicitud.whatsapp,
-      plan: solicitud.producto === "Kit" ? "kit" : "profesional",
+      plan: solicitud.producto === "Kit" ? "kit" : solicitud.producto === "Premium" ? "premium" : "profesional",
     });
     // supabase-js NO lanza excepción cuando falla: devuelve { error }.
     if (error) throw error;
@@ -98,18 +85,6 @@ export async function guardarSolicitud(
     // El flujo continúa por WhatsApp (el mensaje lleva los datos del cliente).
     console.error("[ClubApp] No se pudo guardar la solicitud en Supabase:", err);
     trackEvent("SolicitudNoGuardada", { producto: solicitud.producto });
-  }
-
-  if (CONFIG.FORM_ENDPOINT) {
-    try {
-      await fetch(CONFIG.FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(solicitud),
-      });
-    } catch {
-      /* el flujo continúa por WhatsApp */
-    }
   }
 
   return solicitud;

@@ -29,11 +29,17 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState<"Kit" | "Premium" | null>(null);
 
   return (
     <>
-      <KitModal open={modal} onOpenChange={setModal} />
+      <KitModal
+        open={modal !== null}
+        producto={modal ?? "Kit"}
+        onOpenChange={(v) => {
+          if (!v) setModal(null);
+        }}
+      />
 
       <section className="surface-navy overflow-hidden">
         <div className="container-page py-10 md:py-14">
@@ -63,7 +69,7 @@ function Index() {
             <h2 className="text-2xl md:text-3xl">Elige tu plan y empieza hoy</h2>
             <p className="mt-2 text-navy-muted">Tres formas de formalizar tu club. Escoge la tuya.</p>
             <div className="mt-4">
-              <PlanCards origen="inicio" onElegirKit={() => setModal(true)} />
+              <PlanCards origen="inicio" onElegir={setModal} />
             </div>
             <p className="mt-5 text-sm text-navy-muted">
               ¿No sabes cuál elegir?{" "}

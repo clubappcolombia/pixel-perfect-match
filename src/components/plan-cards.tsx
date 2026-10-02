@@ -1,19 +1,20 @@
 import { Check } from "lucide-react";
-import { Button, ButtonLink, ButtonRoute, Card } from "@/components/ui-kit";
-import { CONFIG, WA_MESSAGES, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+import { Button, ButtonRoute, Card } from "@/components/ui-kit";
+import { CONFIG, formatCOP, trackEvent } from "@/lib/config";
 
 const kit = [
   "Un documento Word editable con los 10 formatos",
   "Guía de diligenciamiento en PDF",
   "Lista de chequeo",
-  "Acompañamiento por WhatsApp",
+  "Tú los llenas a tu ritmo",
+  "Entrega apenas confirmamos tu pago",
 ];
 const profesional = [
   "Todo lo del Kit",
+  "ClubApp diligencia los documentos con los datos de tu club",
   "Asesoría personalizada",
-  "Revisión de información y documentos",
-  "Corrección de errores",
-  "Acompañamiento durante el proceso",
+  "Revisión y corrección de errores",
+  "Entrega en máximo 24 horas tras confirmar el pago",
 ];
 const premium = [
   "Todo lo del Plan Profesional",
@@ -21,6 +22,7 @@ const premium = [
   "Elaboración de la documentación",
   "Revisión integral y carpeta organizada",
   "Documentación lista para radicar",
+  "Tiempo de entrega según la información de tu club",
 ];
 
 function List({ items }: { items: string[] }) {
@@ -37,7 +39,7 @@ function List({ items }: { items: string[] }) {
 }
 
 /** Los tres planes, cada uno con su botón directo. */
-export function PlanCards({ origen, onElegirKit }: { origen: string; onElegirKit: () => void }) {
+export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (producto: "Kit" | "Premium") => void }) {
   return (
     <div id="planes" className="grid gap-5 pt-3 md:grid-cols-3">
       <Card className="flex flex-col">
@@ -49,7 +51,7 @@ export function PlanCards({ origen, onElegirKit }: { origen: string; onElegirKit
           className="mt-6"
           onClick={() => {
             trackEvent("ClickCTA", { cta: `${origen}_kit` });
-            onElegirKit();
+            onElegir("Kit");
           }}
         >
           Elegir Kit
@@ -62,7 +64,7 @@ export function PlanCards({ origen, onElegirKit }: { origen: string; onElegirKit
         </span>
         <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Profesional</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PLAN)}</p>
-        <p className="text-sm text-muted-foreground">Hazlo acompañado por ClubApp</p>
+        <p className="text-sm text-muted-foreground">Tú das los datos, nosotros diligenciamos</p>
         <List items={profesional} />
         <ButtonRoute
           to="/plan-profesional"
@@ -76,17 +78,17 @@ export function PlanCards({ origen, onElegirKit }: { origen: string; onElegirKit
       <Card className="flex flex-col">
         <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Premium</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PREMIUM)}</p>
-        <p className="text-sm text-muted-foreground">Nosotros lo hacemos por ti</p>
+        <p className="text-sm text-muted-foreground">Servicio completo, carpeta lista para radicar</p>
         <List items={premium} />
-        <ButtonLink
-          href={whatsappLink(WA_MESSAGES.premium)}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
           className="mt-6"
-          onClick={() => trackEvent("ClickCTA", { cta: `${origen}_premium` })}
+          onClick={() => {
+            trackEvent("ClickCTA", { cta: `${origen}_premium` });
+            onElegir("Premium");
+          }}
         >
           Elegir Premium
-        </ButtonLink>
+        </Button>
       </Card>
     </div>
   );

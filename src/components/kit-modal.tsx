@@ -8,11 +8,17 @@ import { ButtonLink } from "./ui-kit";
 export function KitModal({
   open,
   onOpenChange,
+  producto = "Kit",
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
+  producto?: "Kit" | "Premium";
 }) {
   const [enviado, setEnviado] = useState<{ nombre: string; mensaje: string } | null>(null);
+  const premium = producto === "Premium";
+  const titulo = premium
+    ? `Solicitar el Plan Premium · ${formatCOP(CONFIG.PRICE_PREMIUM)}`
+    : `Solicitar el Kit · ${formatCOP(CONFIG.PRICE_KIT)}`;
 
   return (
     <Dialog.Root
@@ -27,9 +33,7 @@ export function KitModal({
         <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[92vh] w-[min(32rem,92vw)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border bg-card p-6 shadow-lift">
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
-              <Dialog.Title className="font-display text-2xl">
-                Solicitar el Kit · {formatCOP(CONFIG.PRICE_KIT)}
-              </Dialog.Title>
+              <Dialog.Title className="font-display text-2xl">{titulo}</Dialog.Title>
               <Dialog.Description className="mt-1 text-sm text-muted-foreground">
                 Déjanos tus datos y continuamos por WhatsApp para coordinar el pago y la entrega.
               </Dialog.Description>
@@ -48,7 +52,7 @@ export function KitModal({
                 <p className="font-semibold">¡Listo, {enviado.nombre}!</p>
                 <p className="mt-1 text-muted-foreground">
                   Registramos tu solicitud. Continúa por WhatsApp: allí te indicamos los medios de
-                  pago y, al confirmar tu comprobante, te enviamos el kit.
+                  pago y los siguientes pasos.
                 </p>
               </div>
               <ButtonLink
@@ -58,7 +62,7 @@ export function KitModal({
                 href={whatsappLink(enviado.mensaje)}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackEvent("WhatsAppClick", { origen: "modal_kit" })}
+                onClick={() => trackEvent("WhatsAppClick", { origen: premium ? "modal_premium" : "modal_kit" })}
               >
                 Abrir WhatsApp
               </ButtonLink>
@@ -69,13 +73,13 @@ export function KitModal({
                 {LEGAL_NOTICE}
               </p>
               <SolicitudForm
-                producto="Kit"
+                producto={producto}
                 submitLabel="Continuar por WhatsApp"
                 onSuccess={(data) => {
-                  trackEvent("Lead", { producto: "Kit" });
+                  trackEvent("Lead", { producto });
                   setEnviado({
                     nombre: data.nombre.split(" ")[0] ?? data.nombre,
-                    mensaje: conDatos(WA_MESSAGES.kit, data),
+                    mensaje: conDatos(premium ? WA_MESSAGES.premium : WA_MESSAGES.kit, data),
                   });
                 }}
               />

@@ -83,7 +83,7 @@ function MiDocumento() {
             <div className="mt-5 rounded-xl border border-primary/30 bg-accent p-4 text-sm">
               <p className="font-semibold">Tu solicitud está en proceso.</p>
               <p className="mt-1 text-muted-foreground">
-                Entregamos en máximo 24 horas después de confirmar el pago. Te avisaremos por correo y WhatsApp.
+                Te entregamos tus documentos apenas confirmemos el pago. Te avisaremos por correo y WhatsApp.
               </p>
             </div>
           )}
@@ -103,7 +103,7 @@ function MiDocumento() {
           {estado?.tipo === "sin" && (
             <div className="mt-5 space-y-3 rounded-xl bg-secondary p-4 text-sm">
               <p>No encontramos una solicitud con esos datos.</p>
-              <ButtonRoute to="/plan-profesional" size="sm">Solicitar el Plan Profesional</ButtonRoute>
+              <ButtonRoute to="/planes" size="sm">Ver los planes</ButtonRoute>
             </div>
           )}
         </Card>

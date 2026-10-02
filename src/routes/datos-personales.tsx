@@ -27,7 +27,7 @@ function Datos() {
         <h2 className="text-2xl text-foreground">Datos que recolectamos</h2>
         <p>Nombre, WhatsApp, correo y, para el Plan Profesional, datos del club y de sus integrantes (incluidas cédulas).</p>
         <h2 className="text-2xl text-foreground">Finalidad</h2>
-        <p>Únicamente elaborar y entregar los documentos solicitados y comunicarnos contigo sobre tu solicitud. No vendemos ni compartimos tus datos con terceros.</p>
+        <p>Únicamente elaborar y entregar los documentos solicitados y comunicarnos contigo sobre tu solicitud. No vendemos tus datos. Para operar el servicio usamos proveedores tecnológicos (como Google y Supabase) que almacenan la información por encargo nuestro.</p>
         <h2 className="text-2xl text-foreground">Tus derechos</h2>
         <p>Puedes conocer, actualizar, rectificar y solicitar la supresión de tus datos, así como revocar la autorización.</p>
         <h2 className="text-2xl text-foreground">Contacto</h2>

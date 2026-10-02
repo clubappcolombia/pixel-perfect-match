@@ -5,7 +5,7 @@
 2. Abre el formulario del club (con su correo ya escrito, si configuras el paso A) y pulsa "Ya llené el formulario" → se guarda `formulario_at`.
 3. Te escribe por WhatsApp, paga y pulsa "Ya envié mi comprobante" → se guarda `comprobante_at` (**te llega un correo**).
 4. Tú verificas el pago en tu cuenta, generas los documentos (Autocrat), los subes a Drive.
-5. En Supabase cambias `estado` a `entregado` y pegas el enlace en `url_documento` → **al cliente le llega el correo con su enlace**.
+5. En Supabase pega **primero** el enlace en `url_documento` y **después** cambia `estado` a `entregado` → **al cliente le llega el correo con su enlace** (solo sale si el enlace ya está escrito).
 
 ## Configuración (una sola vez)
 
@@ -43,3 +43,12 @@ where plan = 'profesional' and formulario_at is not null
 order by formulario_at;
 ```
 Estas últimas personas son buenos candidatos para un recordatorio por WhatsApp.
+
+## Checklist de entrega (Kit, Plan Profesional y Premium)
+1. Verifica en tu Nequi o cuenta que el pago llegó y coincide con el valor del plan.
+2. Prepara los documentos y súbelos a Drive (acceso: "cualquier persona con el enlace").
+3. En Supabase → **Table Editor** → `solicitudes`, busca la fila por el correo del cliente.
+4. Pega el enlace en `url_documento` y pulsa Enter.
+5. Cambia `estado` a `entregado` (si quieres, antes a `pago confirmado`).
+6. Comprueba que al cliente le llegó el correo (revisa Spam) o avísale por WhatsApp.
+7. Verifica en `/mi-documento` con su correo y los 4 últimos dígitos de su WhatsApp.
