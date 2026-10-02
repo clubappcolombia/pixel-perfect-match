@@ -1,15 +1,26 @@
 /**
  * ClubApp · avisos automáticos por correo (Google Apps Script).
  * Supabase llama a este script cuando se crea o cambia una fila de "solicitudes".
- *  - Nueva solicitud            -> te avisa a ti
+ *  - Nueva solicitud            -> te avisa a ti  + le envía al cliente su código de seguimiento
  *  - Cliente envía comprobante  -> te avisa a ti
  *  - Pones estado = "entregado" -> le llega el correo al cliente con su enlace
+ *
+ * Cuota: una cuenta Gmail normal envía ~100 destinatarios por día. Para que un abuso del formulario
+ * no te deje sin poder entregar documentos, los avisos "para ti" se omiten cuando queda poca cuota
+ * y la entrega al cliente siempre tiene prioridad.
  */
 const TOKEN = 'CAMBIA_ESTE_TOKEN';                       // invéntate una clave larga
 const DUENO = 'clubappcolombia@gmail.com';
 const SITIO = 'https://TU-SITIO.lovable.app';            // enlace público de tu sitio
+const CUOTA_MIN_AVISOS = 30;                             // por debajo de esto no se mandan avisos para ti
 
 function fmt(c) { return c && c.length === 10 ? c.slice(0, 5) + '-' + c.slice(5) : (c || ''); }
+function haySitio() { return SITIO.indexOf('TU-SITIO') === -1; }
+function cuota() { return MailApp.getRemainingDailyQuota(); }
+
+function avisarDueno(asunto, cuerpo) {
+  if (cuota() > CUOTA_MIN_AVISOS) MailApp.sendEmail(DUENO, asunto, cuerpo);
+}
 
 function doPost(e) {
   if (!e.parameter || e.parameter.token !== TOKEN) {
@@ -20,30 +31,42 @@ function doPost(e) {
   const old = body.old_record || {};
 
   if (body.type === 'INSERT') {
-    MailApp.sendEmail(
-      DUENO,
+    avisarDueno(
       'Nueva solicitud ClubApp (' + r.plan + ')',
       'Nombre: ' + r.nombre + '\nCorreo: ' + r.correo + '\nWhatsApp: ' + r.whatsapp + '\nPlan: ' + r.plan + '\nCódigo: ' + fmt(r.codigo_acceso)
     );
+
+    // Confirmación al cliente con su código (así no lo pierde si cierra la ventana).
+    if (r.correo && r.codigo_acceso && cuota() > 5) {
+      MailApp.sendEmail(
+        r.correo,
+        'Recibimos tu solicitud en ClubApp',
+        'Hola ' + r.nombre + ',\n\nRecibimos tu solicitud. Guarda tu código de seguimiento: ' + fmt(r.codigo_acceso) + '\n' +
+          (haySitio() ? '\nCon tu correo y este código puedes consultar tu entrega en ' + SITIO + '/mi-documento\n' : '') +
+          '\nSi no fuiste tú quien hizo esta solicitud, ignora este mensaje.' +
+          '\n\nClubApp Colombia',
+        { name: 'ClubApp' }
+      );
+    }
   }
 
   if (body.type === 'UPDATE') {
     if (r.comprobante_at && !old.comprobante_at) {
-      MailApp.sendEmail(
-        DUENO,
+      avisarDueno(
         'Comprobante enviado: ' + r.nombre,
         r.nombre + ' dice que ya envió el comprobante del Plan Profesional.\nCorreo: ' + r.correo +
           '\nWhatsApp: ' + r.whatsapp + '\nVerifica el pago antes de cambiar el estado.'
       );
     }
     if (r.estado === 'entregado' && old.estado !== 'entregado' && r.url_documento) {
+      // La entrega al cliente NO depende de la cuota reservada para avisos.
       MailApp.sendEmail(
         r.correo,
         'Tus documentos de ClubApp están listos',
         'Hola ' + r.nombre + ',\n\nTus documentos ya están listos. Descárgalos aquí:\n' + r.url_documento +
-          (SITIO.indexOf('TU-SITIO') === -1
-          ? '\n\nTambién puedes consultarlos en ' + SITIO + '/mi-documento con tu correo y tu código de seguimiento: ' + fmt(r.codigo_acceso) + '.'
-          : '') +
+          (haySitio()
+            ? '\n\nTambién puedes consultarlos en ' + SITIO + '/mi-documento con tu correo y tu código de seguimiento: ' + fmt(r.codigo_acceso) + '.'
+            : '') +
           '\n\nRecuerda: ClubApp es una herramienta de apoyo documental; revisa los requisitos de tu instituto municipal de deportes.' +
           '\n\nClubApp Colombia',
         { name: 'ClubApp' }

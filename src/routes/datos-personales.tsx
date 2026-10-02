@@ -24,14 +24,37 @@ function Datos() {
           En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, ClubApp informa cómo
           trata los datos personales que recibe.
         </p>
+        <h2 className="text-2xl text-foreground">Responsable del tratamiento</h2>
+        <p>
+          ClubApp Colombia. Contacto para consultas y reclamos: {CONFIG.EMAIL} o por WhatsApp.
+        </p>
         <h2 className="text-2xl text-foreground">Datos que recolectamos</h2>
-        <p>Nombre, WhatsApp, correo y, para el Plan Profesional, datos del club y de sus integrantes (incluidas cédulas).</p>
+        <p>Nombre, WhatsApp, correo y, para el Plan Profesional y el Premium, datos del club y de sus integrantes (incluidas cédulas).</p>
+        <h2 className="text-2xl text-foreground">Datos de menores de edad</h2>
+        <p>
+          Si entre los integrantes del club hay menores de edad, quien nos entrega sus datos declara contar con la autorización de sus
+          representantes legales. Tratamos esos datos únicamente para elaborar los documentos del club y respetamos el interés superior del menor.
+        </p>
         <h2 className="text-2xl text-foreground">Finalidad</h2>
-        <p>Únicamente elaborar y entregar los documentos solicitados y comunicarnos contigo sobre tu solicitud. No vendemos tus datos. Para operar el servicio usamos proveedores tecnológicos (como Google y Supabase) que almacenan la información por encargo nuestro.</p>
+        <p>Únicamente elaborar y entregar los documentos solicitados y comunicarnos contigo sobre tu solicitud. No vendemos tus datos.</p>
+        <h2 className="text-2xl text-foreground">Proveedores y transmisión de datos</h2>
+        <p>
+          Para operar el servicio usamos proveedores tecnológicos (como Google y Supabase) que almacenan la información por encargo nuestro y
+          pueden hacerlo en servidores ubicados fuera de Colombia.
+        </p>
+        <h2 className="text-2xl text-foreground">Conservación</h2>
+        <p>
+          Conservamos los datos solo el tiempo necesario para entregar el servicio y atender reclamos. Puedes pedirnos en cualquier momento
+          que los eliminemos.
+        </p>
         <h2 className="text-2xl text-foreground">Tus derechos</h2>
         <p>Puedes conocer, actualizar, rectificar y solicitar la supresión de tus datos, así como revocar la autorización.</p>
-        <h2 className="text-2xl text-foreground">Contacto</h2>
-        <p>Escríbenos a {CONFIG.EMAIL} o por WhatsApp.</p>
+        <h2 className="text-2xl text-foreground">Consultas y reclamos</h2>
+        <p>
+          Atendemos las consultas en máximo 10 días hábiles y los reclamos en máximo 15 días hábiles, contados desde su recibo. Escríbenos a{" "}
+          {CONFIG.EMAIL} indicando tu nombre y qué necesitas.
+        </p>
+        <p className="text-sm">Última actualización: 2 de octubre de 2026.</p>
       </div>
     </section>
   );

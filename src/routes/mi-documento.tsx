@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/mi-documento")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Mi documento — Consulta tu entrega · ClubApp" },
       { name: "description", content: "Consulta con tu correo el estado de entrega de tus documentos ClubApp." },
       { property: "og:title", content: "Mi documento — ClubApp" },
@@ -19,7 +20,33 @@ export const Route = createFileRoute("/mi-documento")({
   component: MiDocumento,
 });
 
-type Estado = { tipo: "pendiente" } | { tipo: "listo"; url: string } | { tipo: "sin" } | { tipo: "error" } | { tipo: "bloqueado" } | null;
+type Estado = { tipo: "pendiente"; titulo: string; texto: string } | { tipo: "listo"; url: string } | { tipo: "sin" } | { tipo: "error" } | { tipo: "bloqueado" } | null;
+
+/** Texto según el avance real de la solicitud (los campos nuevos solo existen tras aplicar la migración 20261006). */
+function detallePendiente(fila: { estado?: string; comprobante_at?: string | null; formulario_at?: string | null }) {
+  if (fila.estado === "rechazado") {
+    return {
+      titulo: "No pudimos confirmar tu pago.",
+      texto: "Escríbenos por WhatsApp para revisar tu caso y continuar.",
+    };
+  }
+  if (fila.estado === "pago confirmado") {
+    return {
+      titulo: "Pago confirmado: estamos preparando tus documentos.",
+      texto: "Te avisaremos por correo y WhatsApp apenas estén listos.",
+    };
+  }
+  if (fila.comprobante_at) {
+    return {
+      titulo: "Recibimos tu aviso de comprobante.",
+      texto: "Estamos verificando el pago en la cuenta. Te avisaremos por correo y WhatsApp.",
+    };
+  }
+  return {
+    titulo: "Tu solicitud está en proceso.",
+    texto: "Te entregamos tus documentos apenas confirmemos el pago. Te avisaremos por correo y WhatsApp.",
+  };
+}
 
 function MiDocumento() {
   const [correo, setCorreo] = useState("");
@@ -50,9 +77,9 @@ function MiDocumento() {
       setEstado(
         !fila
           ? { tipo: "sin" }
-          : fila.estado === "entregado" && fila.url_documento
+          : fila.estado === "entregado" && typeof fila.url_documento === "string" && /^https:\/\//i.test(fila.url_documento)
             ? { tipo: "listo", url: fila.url_documento }
-            : { tipo: "pendiente" },
+            : { tipo: "pendiente", ...detallePendiente(fila) },
       );
     } catch (err) {
       const msg = String((err as { message?: string })?.message ?? "");
@@ -89,10 +116,8 @@ function MiDocumento() {
 
           {estado?.tipo === "pendiente" && (
             <div className="mt-5 rounded-xl border border-primary/30 bg-accent p-4 text-sm">
-              <p className="font-semibold">Tu solicitud está en proceso.</p>
-              <p className="mt-1 text-muted-foreground">
-                Te entregamos tus documentos apenas confirmemos el pago. Te avisaremos por correo y WhatsApp.
-              </p>
+              <p className="font-semibold">{estado.titulo}</p>
+              <p className="mt-1 text-muted-foreground">{estado.texto}</p>
             </div>
           )}
           {estado?.tipo === "listo" && (

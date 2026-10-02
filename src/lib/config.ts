@@ -61,20 +61,23 @@ export interface Solicitud {
   nombre: string;
   whatsapp: string;
   correo: string;
-  estado: "solicitado" | "pago confirmado" | "entregado";
+  estado: "solicitado" | "pago confirmado" | "entregado" | "rechazado";
   /** Código de seguimiento que genera el servidor; null si no se pudo guardar. */
   codigo: string | null;
+  /** Mensaje para el cliente si el servidor rechazó la solicitud a propósito (anti-spam, correo inválido). null = sin bloqueo. */
+  bloqueo: string | null;
 }
 
 /** Guarda la solicitud en Supabase. Si falla, el flujo sigue por WhatsApp con los datos en el mensaje. */
 export async function guardarSolicitud(
-  data: Omit<Solicitud, "fecha" | "estado" | "codigo">,
+  data: Omit<Solicitud, "fecha" | "estado" | "codigo" | "bloqueo">,
 ): Promise<Solicitud> {
   const solicitud: Solicitud = {
     ...data,
     fecha: new Date().toISOString(),
     estado: "solicitado",
     codigo: null,
+    bloqueo: null,
   };
 
   try {
@@ -90,7 +93,13 @@ export async function guardarSolicitud(
     if (error) throw error;
     solicitud.codigo = typeof codigo === "string" ? codigo : null;
   } catch (err) {
-    // El flujo continúa por WhatsApp (el mensaje lleva los datos del cliente).
+    const { code, message } = (err ?? {}) as { code?: string; message?: string };
+    if (code === "P0001" && message) {
+      // Rechazo intencional del servidor (anti-spam, correo inválido): se le explica al cliente
+      // en vez de dejarlo avanzar sin código y sin saber por qué.
+      solicitud.bloqueo = message;
+    }
+    // En cualquier otro fallo el flujo continúa por WhatsApp (el mensaje lleva los datos del cliente).
     console.error("[ClubApp] No se pudo guardar la solicitud en Supabase:", err);
     trackEvent("SolicitudNoGuardada", { producto: solicitud.producto });
   }

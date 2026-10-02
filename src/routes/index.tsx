@@ -111,7 +111,7 @@ function Index() {
             },
             {
               icon: ShieldCheck,
-              title: "Formato aceptado",
+              title: "Formatos organizados",
               text: "Un documento Word editable con los 10 formatos, más la guía de diligenciamiento en PDF y la lista de chequeo.",
             },
             {

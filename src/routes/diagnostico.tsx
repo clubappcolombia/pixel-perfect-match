@@ -29,7 +29,7 @@ function Diagnostico() {
   const [resp, setResp] = useState<boolean[]>([]);
   const done = resp.length === preguntas.length;
   const score = resp.filter(Boolean).length;
-  const plan = score >= 4 ? "Básico" : score >= 2 ? "Profesional" : "Premium";
+  const plan = score >= 4 ? "Kit" : score >= 2 ? "Profesional" : "Premium";
 
   return (
     <section className="section">
@@ -54,7 +54,7 @@ function Diagnostico() {
               <p className="text-sm text-muted-foreground">Tu resultado: {score} de {preguntas.length} avances</p>
               <h2 className="mt-2 text-2xl">Te recomendamos el plan <span className="text-primary">{plan}</span></h2>
               <p className="mt-3 text-sm text-muted-foreground">
-                {plan === "Básico" && "Tu club ya está bien encaminado. Con los formatos y la guía puedes completarlo tú."}
+                {plan === "Kit" && "Tu club ya está bien encaminado. Con los formatos y la guía puedes completarlo tú."}
                 {plan === "Profesional" && "Tienes una base, pero te conviene revisión y acompañamiento para evitar errores."}
                 {plan === "Premium" && "Estás empezando. Lo mejor es que organicemos y elaboremos toda la documentación por ti."}
               </p>

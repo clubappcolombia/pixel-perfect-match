@@ -15,7 +15,14 @@ export function KitModal({
   onOpenChange: (v: boolean) => void;
   producto?: "Kit" | "Premium";
 }) {
-  const [enviado, setEnviado] = useState<{ nombre: string; mensaje: string; codigo: string | null } | null>(null);
+  const [resultado, setResultado] = useState<{
+    producto: "Kit" | "Premium";
+    nombre: string;
+    mensaje: string;
+    codigo: string | null;
+  } | null>(null);
+  // Solo se muestra el resultado del mismo producto; al cerrar el modal NO se borra, así el cliente no pierde su código.
+  const enviado = resultado && resultado.producto === producto ? resultado : null;
   const premium = producto === "Premium";
   const titulo = premium
     ? `Solicitar el Plan Premium · ${formatCOP(CONFIG.PRICE_PREMIUM)}`
@@ -24,10 +31,7 @@ export function KitModal({
   return (
     <Dialog.Root
       open={open}
-      onOpenChange={(v) => {
-        onOpenChange(v);
-        if (!v) setEnviado(null);
-      }}
+      onOpenChange={onOpenChange}
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-navy/60 backdrop-blur-sm" />
@@ -68,6 +72,13 @@ export function KitModal({
               >
                 Abrir WhatsApp
               </ButtonLink>
+              <button
+                type="button"
+                className="w-full text-center text-sm font-semibold text-primary-text underline"
+                onClick={() => setResultado(null)}
+              >
+                Hacer otra solicitud
+              </button>
             </div>
           ) : (
             <>
@@ -79,7 +90,8 @@ export function KitModal({
                 submitLabel="Continuar por WhatsApp"
                 onSuccess={(data) => {
                   trackEvent("Lead", { producto });
-                  setEnviado({
+                  setResultado({
+                    producto,
                     nombre: data.nombre.split(" ")[0] ?? data.nombre,
                     mensaje: conDatos(premium ? WA_MESSAGES.premium : WA_MESSAGES.kit, data),
                     codigo: data.codigo ?? null,

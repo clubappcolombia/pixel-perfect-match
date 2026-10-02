@@ -29,7 +29,7 @@ alter table public.solicitudes add constraint solicitudes_plan_check
 
 alter table public.solicitudes drop constraint if exists solicitudes_estado_check;
 alter table public.solicitudes add constraint solicitudes_estado_check
-  check (estado in ('solicitado', 'pago confirmado', 'entregado')) not valid;
+  check (estado in ('solicitado', 'pago confirmado', 'entregado', 'rechazado')) not valid;
 
 alter table public.solicitudes drop constraint if exists solicitudes_largos_check;
 alter table public.solicitudes add constraint solicitudes_largos_check
@@ -53,28 +53,7 @@ begin
   end loop;
 end $$;
 
-create policy "Cualquiera puede crear una solicitud"
-  on public.solicitudes
-  for insert
-  to anon, authenticated
-  with check (estado = 'solicitado' and url_documento is null);
-
--- (sin políticas de select/update/delete: solo tú, desde el panel de Supabase, las gestionas)
-
--- Consulta pública de entrega: requiere correo + últimos 4 dígitos del WhatsApp.
-create or replace function public.consultar_entrega(p_correo text, p_whatsapp4 text)
-returns table (estado text, url_documento text)
-language sql
-security definer
-set search_path = public
-as $$
-  select s.estado, s.url_documento
-  from public.solicitudes s
-  where lower(s.correo) = lower(trim(p_correo))
-    and right(regexp_replace(s.whatsapp, '\D', '', 'g'), 4) = p_whatsapp4
-  order by coalesce(s.creado_en, s.created_at) desc
-  limit 1;
-$$;
-
-revoke all on function public.consultar_entrega(text, text) from public;
-grant execute on function public.consultar_entrega(text, text) to anon, authenticated;
+-- (sin políticas de insert/select/update/delete: las solicitudes se crean solo con crear_solicitud()
+--  y se gestionan desde el panel de Supabase. La consulta de entrega y sus funciones viven en
+--  20261005000000_codigo_acceso.sql y 20261006000000_correcciones.sql; este archivo ya no las toca,
+--  así que volver a ejecutarlo NO reabre el insert directo ni reemplaza consultar_entrega.)

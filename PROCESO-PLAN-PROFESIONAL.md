@@ -16,13 +16,13 @@
 4. En `src/lib/config.ts` pon: `FORM_EMAIL_ENTRY: "entry.123456789",`
 
 ### B. Base de datos
-En Supabase → SQL Editor, ejecuta en orden (cada una con Run): `20261003000000_plan_progreso.sql`, `20261004000000_antispam.sql` y `20261005000000_codigo_acceso.sql`.
+En Supabase → SQL Editor, ejecuta en orden (cada una con Run): `20261003000000_plan_progreso.sql`, `20261004000000_antispam.sql`, `20261005000000_codigo_acceso.sql` y `20261006000000_correcciones.sql` (nuevo: estado `rechazado`, no permite `entregado` sin enlace https, valida el correo y devuelve el avance en «Mi documento»).
 
 Si un cliente perdió su código: Table Editor → `solicitudes` → busca por correo → copia `codigo_acceso` y envíaselo por WhatsApp.
 
 ### C. Avisos por correo (opcional, 10 minutos)
 1. Entra a script.google.com con la cuenta clubappcolombia@gmail.com → **Nuevo proyecto**.
-2. Pega el contenido de `apps-script/notificar.gs`. Cambia `TOKEN` por una clave larga inventada por ti y `SITIO` por tu enlace `.lovable.app`.
+2. Pega el contenido de `apps-script/notificar.gs` (ahora también le envía al cliente su código por correo y reserva cuota para las entregas). Cambia `TOKEN` por una clave larga inventada por ti y `SITIO` por tu enlace `.lovable.app`.
 3. **Implementar** → **Nueva implementación** → tipo **Aplicación web** → Ejecutar como: **Yo** → Acceso: **Cualquier persona** → **Implementar**. Autoriza los permisos y copia la URL.
 4. En Supabase → **Integrations** → busca **Database Webhooks** → **Install** (solo la primera vez) → pestaña **Webhooks** → **Create a new hook**: tabla `solicitudes`, eventos **Insert** y **Update**, tipo **HTTP Request**, método **POST**, URL = la URL de Apps Script + `?token=TU_TOKEN`.
 
@@ -51,6 +51,6 @@ Estas últimas personas son buenos candidatos para un recordatorio por WhatsApp.
 2. Prepara los documentos y súbelos a Drive (acceso: "cualquier persona con el enlace").
 3. En Supabase → **Table Editor** → `solicitudes`, busca la fila por el correo del cliente.
 4. Pega el enlace en `url_documento` y pulsa Enter.
-5. Cambia `estado` a `entregado` (si quieres, antes a `pago confirmado`).
+5. Cambia `estado` a `entregado` (si quieres, antes a `pago confirmado`). Si el pago no se pudo verificar, usa `rechazado`. La base ya no deja marcar `entregado` sin enlace.
 6. Comprueba que al cliente le llegó el correo (revisa Spam) o avísale por WhatsApp.
 7. Verifica en `/mi-documento` con su correo y su código de seguimiento (columna `codigo_acceso` en `solicitudes`).

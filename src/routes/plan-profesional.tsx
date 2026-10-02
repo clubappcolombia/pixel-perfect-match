@@ -54,7 +54,7 @@ function PlanPage() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = sessionStorage.getItem(KEY);
       if (raw) setP({ ...inicial, ...JSON.parse(raw) });
     } catch {
       /* ignore */
@@ -65,7 +65,7 @@ function PlanPage() {
     setP((prev) => {
       const v = { ...prev, ...next };
       try {
-        localStorage.setItem(KEY, JSON.stringify(v));
+        sessionStorage.setItem(KEY, JSON.stringify(v));
       } catch {
         /* ignore */
       }

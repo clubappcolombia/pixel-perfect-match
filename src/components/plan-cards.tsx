@@ -21,7 +21,7 @@ const premium = [
   "Organización de la información",
   "Elaboración de la documentación",
   "Revisión integral y carpeta organizada",
-  "Documentación lista para radicar",
+  "Documentación organizada para radicar",
   "Tiempo de entrega según la información de tu club",
 ];
 
@@ -78,7 +78,7 @@ export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (pro
       <Card className="flex flex-col">
         <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Premium</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PREMIUM)}</p>
-        <p className="text-sm text-muted-foreground">Servicio completo, carpeta lista para radicar</p>
+        <p className="text-sm text-muted-foreground">Servicio completo, carpeta organizada para radicar</p>
         <List items={premium} />
         <Button
           className="mt-6"

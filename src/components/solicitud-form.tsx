@@ -4,7 +4,7 @@ import { guardarSolicitud, type SolicitudProducto } from "@/lib/config";
 import { solicitudSchema } from "@/lib/validation";
 import { Button, Field, Input } from "./ui-kit";
 
-type Errors = Partial<Record<"nombre" | "whatsapp" | "correo" | "autorizacion", string>>;
+type Errors = Partial<Record<"nombre" | "whatsapp" | "correo" | "confirmarCorreo" | "autorizacion" | "general", string>>;
 
 export interface SolicitudData {
   nombre: string;
@@ -23,7 +23,7 @@ export function SolicitudForm({
   submitLabel: string;
   onSuccess: (data: SolicitudData) => void;
 }) {
-  const [values, setValues] = useState({ nombre: "", whatsapp: "", correo: "" });
+  const [values, setValues] = useState({ nombre: "", whatsapp: "", correo: "", confirmarCorreo: "" });
   const [autorizacion, setAutorizacion] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [loading, setLoading] = useState(false);
@@ -45,11 +45,16 @@ export function SolicitudForm({
     setLoading(true);
     const clean = {
       nombre: result.data.nombre,
-      whatsapp: result.data.whatsapp,
+      whatsapp: result.data.whatsapp.replace(/[^\d+]/g, ""),
       correo: result.data.correo,
     };
     const guardada = trampa ? null : await guardarSolicitud({ ...clean, producto });
     setLoading(false);
+    if (guardada?.bloqueo) {
+      // El servidor rechazó la solicitud a propósito (p. ej. repetida hace menos de 2 minutos).
+      setErrors({ general: guardada.bloqueo });
+      return;
+    }
     onSuccess({ ...clean, codigo: guardada?.codigo ?? null });
   }
 
@@ -90,6 +95,17 @@ export function SolicitudForm({
           onChange={(e) => setValues((v) => ({ ...v, correo: e.target.value }))}
         />
       </Field>
+      <Field label="Confirma tu correo" error={errors.confirmarCorreo} hint="Ahí te enviaremos tus documentos: revísalo bien">
+        <Input
+          value={values.confirmarCorreo}
+          type="email"
+          maxLength={255}
+          autoComplete="off"
+          placeholder="Repite tu correo"
+          onPaste={(e) => e.preventDefault()}
+          onChange={(e) => setValues((v) => ({ ...v, confirmarCorreo: e.target.value }))}
+        />
+      </Field>
 
       <div className="space-y-1.5">
         <label className="flex items-start gap-3 text-sm">
@@ -113,6 +129,12 @@ export function SolicitudForm({
           </p>
         ) : null}
       </div>
+
+      {errors.general ? (
+        <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm font-medium text-destructive">
+          {errors.general}
+        </p>
+      ) : null}
 
       <Button type="submit" size="lg" className="w-full" disabled={loading}>
         {loading ? "Enviando…" : submitLabel}
