@@ -11,8 +11,8 @@ export const CONFIG = {
   FORM_ENDPOINT: null as string | null,
   /** Endpoint que consulta el estado de entrega por correo. null = solo local. */
   DOWNLOAD_ENDPOINT: null as string | null,
-  PRICE_KIT: 40000,
-  PRICE_PLAN: 150000,
+  PRICE_KIT: 50000,
+  PRICE_PLAN: 160000,
   EMAIL: "clubappcolombia@gmail.com",
 } as const;
 
@@ -27,10 +27,18 @@ export function whatsappLink(message: string) {
   return `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+/** Agrega nombre, correo y WhatsApp al mensaje para que la solicitud llegue completa por WhatsApp. */
+export function conDatos(
+  mensaje: string,
+  d: { nombre: string; correo: string; whatsapp: string },
+) {
+  return `${mensaje}\n\nNombre: ${d.nombre}\nCorreo: ${d.correo}\nWhatsApp: ${d.whatsapp}`;
+}
+
 export const WA_MESSAGES = {
-  kit: "Hola, quiero el Kit de Formalización ($40.000).",
-  plan: "Hola, quiero el Plan Profesional ($150.000).",
-  planPago: "Hola, quiero pagar el Plan Profesional ($150.000). ¿Cuáles son los medios de pago?",
+  kit: "Hola, quiero el Kit de Formalización ($50.000).",
+  plan: "Hola, quiero el Plan Profesional ($160.000).",
+  planPago: "Hola, quiero pagar el Plan Profesional ($160.000). ¿Cuáles son los medios de pago?",
   planComprobante: "Hola, ya envié mi comprobante de pago del Plan Profesional.",
   general: "Hola, tengo una pregunta sobre ClubApp.",
 } as const;
@@ -65,7 +73,8 @@ export async function guardarSolicitud(
     try {
       await fetch(CONFIG.FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        // text/plain evita el bloqueo CORS de Apps Script (el contenido sigue siendo JSON).
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(solicitud),
       });
     } catch {

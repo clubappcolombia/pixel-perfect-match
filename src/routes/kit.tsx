@@ -9,17 +9,17 @@ import { CONFIG, LEGAL_NOTICE, formatCOP, trackEvent } from "@/lib/config";
 export const Route = createFileRoute("/kit")({
   head: () => ({
     meta: [
-      { title: "Kit de Formalización $40.000 — ClubApp" },
+      { title: "Kit de Formalización $50.000 — ClubApp" },
       {
         name: "description",
         content:
-          "10 documentos en Word editable, guía de diligenciamiento y lista de chequeo para formalizar tu club deportivo. Pago único de $40.000 COP.",
+          "Un documento Word editable con los 10 formatos, guía de diligenciamiento en PDF y lista de chequeo para formalizar tu club deportivo. Pago único de $50.000 COP.",
       },
       { property: "og:title", content: "Kit de Formalización — ClubApp" },
       {
         property: "og:description",
         content:
-          "Los 10 documentos que tu club necesita, en Word editable, con guía paso a paso. $40.000 COP, pago único.",
+          "Los 10 formatos que tu club necesita en un documento Word editable, con guía paso a paso en PDF. $50.000 COP, pago único.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: "¿En qué formato llegan los documentos?",
-    a: "En Word editable, para que los adaptes al nombre, la sede y los integrantes de tu club.",
+    a: "Los 10 formatos llegan en un solo documento Word editable, para que los adaptes al nombre, la sede y los integrantes de tu club. La guía de diligenciamiento llega en PDF.",
   },
   {
     q: "¿Sirve para cualquier municipio?",
@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     q: "¿Y si prefiero que ustedes lo diligencien?",
-    a: "Para eso está el Plan Profesional de $150.000: tú entregas los datos y nosotros preparamos todo en máximo 24 horas.",
+    a: "Para eso está el Plan Profesional de $160.000: tú entregas los datos y nosotros preparamos todo en máximo 24 horas.",
   },
 ];
 
@@ -118,7 +118,7 @@ function KitPage() {
               ))}
             </ul>
             <p className="mt-4 text-sm text-muted-foreground">
-              Todos en Word editable, más la guía de diligenciamiento.
+              Todos dentro de un documento Word editable, más la guía de diligenciamiento en PDF.
             </p>
           </Card>
         </div>

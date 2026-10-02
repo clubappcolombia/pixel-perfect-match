@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Kit de Formalización por $40.000 o Plan Profesional por $150.000: los documentos que tu club deportivo necesita para avanzar hacia el Reconocimiento Deportivo.",
+          "Kit de Formalización por $50.000 o Plan Profesional por $160.000: los documentos que tu club deportivo necesita para avanzar hacia el Reconocimiento Deportivo.",
       },
       { property: "og:title", content: "ClubApp — Tu club, en regla" },
       {
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 const comparacion = [
-  { label: "10 documentos en Word editable", kit: true, plan: true },
+  { label: "10 formatos en un documento Word editable", kit: true, plan: true },
   { label: "Guía de diligenciamiento y lista de chequeo", kit: true, plan: true },
   { label: "Tú diligencias los documentos", kit: true, plan: false },
   { label: "ClubApp diligencia por ti", kit: false, plan: true },
@@ -85,7 +85,7 @@ function Index() {
               width={1408}
               height={1008}
               fetchPriority="high"
-              className="w-full rounded-2xl object-cover shadow-lift md:scale-105 md:origin-left"
+              className="w-full rounded-2xl object-cover shadow-lift"
             />
             <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-navy/35 via-transparent to-transparent" />
           </div>
@@ -103,7 +103,7 @@ function Index() {
             {
               icon: ShieldCheck,
               title: "Formato aceptado",
-              text: "Plantillas en Word editable, con guía paso a paso y lista de chequeo.",
+              text: "Plantillas en un documento Word editable, con guía en PDF paso a paso y lista de chequeo.",
             },
             {
               icon: Clock,
@@ -134,7 +134,7 @@ function Index() {
               <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_KIT)}</p>
               <p className="text-sm text-muted-foreground">Pago único · Autogestión</p>
               <p className="mt-4 flex-1 text-sm text-muted-foreground">
-                Recibes los 10 documentos en Word, la guía de diligenciamiento y la lista de
+                Recibes los 10 formatos en un documento Word editable, la guía de diligenciamiento en PDF y la lista de
                 chequeo. Tú los completas a tu ritmo.
               </p>
               <div className="mt-6 flex flex-col gap-2">

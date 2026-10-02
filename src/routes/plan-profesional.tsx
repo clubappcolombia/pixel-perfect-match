@@ -3,16 +3,24 @@ import { useEffect, useState } from "react";
 import { Check, ExternalLink } from "lucide-react";
 import { SolicitudForm, type SolicitudData } from "@/components/solicitud-form";
 import { Button, ButtonLink, Card } from "@/components/ui-kit";
-import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+import {
+  CONFIG,
+  LEGAL_NOTICE,
+  WA_MESSAGES,
+  conDatos,
+  formatCOP,
+  trackEvent,
+  whatsappLink,
+} from "@/lib/config";
 
 export const Route = createFileRoute("/plan-profesional")({
   head: () => ({
     meta: [
-      { title: "Plan Profesional $150.000 — ClubApp" },
+      { title: "Plan Profesional $160.000 — ClubApp" },
       {
         name: "description",
         content:
-          "Nosotros diligenciamos la documentación de tu club deportivo y la entregamos en máximo 24 horas tras confirmar el pago. $150.000 COP.",
+          "Nosotros diligenciamos la documentación de tu club deportivo y la entregamos en máximo 24 horas tras confirmar el pago. $160.000 COP.",
       },
       { property: "og:title", content: "Plan Profesional — ClubApp" },
       {
@@ -40,6 +48,8 @@ const inicial: Progreso = { paso: 0, datos: null, formAbierto: false, comprobant
 
 function PlanPage() {
   const [p, setP] = useState<Progreso>(inicial);
+  const wa = (mensaje: string) =>
+    whatsappLink(p.datos ? conDatos(mensaje, p.datos) : mensaje);
 
   useEffect(() => {
     try {
@@ -149,7 +159,7 @@ function PlanPage() {
                 </p>
                 <div className="mt-5 flex flex-col gap-3">
                   <ButtonLink
-                    href={whatsappLink(WA_MESSAGES.planPago)}
+                    href={wa(WA_MESSAGES.planPago)}
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="whatsapp"
@@ -158,9 +168,18 @@ function PlanPage() {
                   >
                     Pagar por WhatsApp
                   </ButtonLink>
-                  <Button variant="outline" onClick={() => update({ comprobante: true, paso: 3 })}>
-                    Ya envié mi comprobante
-                  </Button>
+                  <ButtonLink
+                    href={wa(WA_MESSAGES.planComprobante)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outline"
+                    onClick={() => {
+                      trackEvent("WhatsAppClick", { origen: "plan_comprobante" });
+                      update({ comprobante: true, paso: 3 });
+                    }}
+                  >
+                    Ya pagué: enviar comprobante por WhatsApp
+                  </ButtonLink>
                 </div>
               </>
             )}
