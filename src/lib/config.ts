@@ -13,6 +13,7 @@ export const CONFIG = {
   DOWNLOAD_ENDPOINT: null as string | null,
   PRICE_KIT: 40000,
   PRICE_PLAN: 150000,
+  PRICE_PREMIUM: 300000,
   EMAIL: "clubappcolombia@gmail.com",
 } as const;
 
@@ -32,6 +33,8 @@ export const WA_MESSAGES = {
   plan: "Hola, quiero el Plan Profesional ($150.000).",
   planPago: "Hola, quiero pagar el Plan Profesional ($150.000). ¿Cuáles son los medios de pago?",
   planComprobante: "Hola, ya envié mi comprobante de pago del Plan Profesional.",
+  premium: "Hola, quiero el Plan Premium ($300.000): que ClubApp haga todo por mí.",
+  diagnostico: "Hola, hice el diagnóstico en ClubApp y quiero asesoría.",
   general: "Hola, tengo una pregunta sobre ClubApp.",
 } as const;
 

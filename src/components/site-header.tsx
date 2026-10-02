@@ -7,9 +7,10 @@ import { ButtonLink } from "./ui-kit";
 
 const links = [
   { to: "/", label: "Inicio" },
-  { to: "/kit", label: "Kit" },
-  { to: "/plan-profesional", label: "Plan Profesional" },
+  { to: "/diagnostico", label: "Diagnóstico" },
+  { to: "/planes", label: "Planes" },
   { to: "/mi-documento", label: "Mi documento" },
+  { to: "/ayuda", label: "Ayuda" },
 ] as const;
 
 export function SiteHeader() {

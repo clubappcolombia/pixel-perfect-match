@@ -49,30 +49,28 @@ function Index() {
           <div>
             <span className="eyebrow">Tu club, en regla</span>
             <h1 className="mt-4 text-4xl md:text-5xl">
-              La documentación que tu club deportivo necesita, <span className="text-primary">lista</span>
+              Crea y formaliza tu club deportivo <span className="text-primary">sin perder tiempo</span>
             </h1>
             <p className="mt-4 max-w-xl text-lg text-navy-muted">
-              Entrenadores y líderes de club en Colombia usan ClubApp para organizar sus documentos y
-              avanzar hacia el Reconocimiento Deportivo, sin perderse entre requisitos.
+              Organiza la información de tu club, completa tu documentación y recibe acompañamiento
+              durante el proceso.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button
-                size="lg"
-                onClick={() => {
-                  trackEvent("ClickCTA", { cta: "hero_kit" });
-                  setModal(true);
-                }}
-              >
-                Comprar mi kit · {formatCOP(CONFIG.PRICE_KIT)}
-              </Button>
               <ButtonRoute
-                to="/plan-profesional"
+                to="/diagnostico"
+                size="lg"
+                onClick={() => trackEvent("ClickCTA", { cta: "hero_crear" })}
+              >
+                Crear mi club
+              </ButtonRoute>
+              <ButtonRoute
+                to="/planes"
                 variant="outline"
                 size="lg"
                 className="bg-transparent text-navy-foreground hover:bg-navy-foreground/10"
                 onClick={() => trackEvent("ClickCTA", { cta: "hero_plan" })}
               >
-                Ver Plan Profesional
+                Ver planes
               </ButtonRoute>
             </div>
             <p className="mt-5 text-xs leading-relaxed text-navy-muted">{LEGAL_NOTICE}</p>
@@ -85,6 +83,20 @@ function Index() {
             height={1008}
             className="w-full rounded-2xl object-cover shadow-lift"
           />
+        </div>
+      </section>
+
+      <section className="section pb-0">
+        <div className="container-page">
+          <span className="eyebrow">Más que formatos</span>
+          <h2 className="mt-3 max-w-2xl text-3xl md:text-4xl">Te acompañamos en todo el camino</h2>
+          <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-6">
+            {["Organización", "Documentación", "Automatización", "Acompañamiento", "Asesoría", "Seguimiento"].map((t) => (
+              <div key={t} className="rounded-xl border bg-card px-3 py-4 text-center text-sm font-semibold shadow-card">
+                {t}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -121,6 +133,10 @@ function Index() {
           <div className="max-w-2xl">
             <span className="eyebrow">Elige tu camino</span>
             <h2 className="mt-3 text-3xl md:text-4xl">Kit de Formalización o Plan Profesional</h2>
+            <p className="mt-2 text-sm">
+              ¿Prefieres que hagamos todo?{" "}
+              <Link to="/planes" className="font-semibold text-primary underline">Mira el Plan Premium</Link>.
+            </p>
             <p className="mt-3 text-muted-foreground">
               Ambos incluyen los mismos documentos. La diferencia está en quién los diligencia.
             </p>
