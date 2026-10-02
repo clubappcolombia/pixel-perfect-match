@@ -85,6 +85,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "ClubApp Colombia" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      ...(CONFIG.SITE_URL
+        ? [
+            { property: "og:image", content: `${CONFIG.SITE_URL}/og-image.jpg` },
+            { name: "twitter:image", content: `${CONFIG.SITE_URL}/og-image.jpg` },
+          ]
+        : []),
     ],
     scripts:
       CONFIG.GTM_ID && /^GTM-[A-Z0-9]+$/.test(CONFIG.GTM_ID)

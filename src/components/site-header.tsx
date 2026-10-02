@@ -79,6 +79,15 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
+            <ButtonLink
+              href={whatsappLink(WA_MESSAGES.general)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="my-3"
+              onClick={() => trackEvent("WhatsAppClick", { origen: "header_movil" })}
+            >
+              Escríbenos por WhatsApp
+            </ButtonLink>
           </div>
         </nav>
       ) : null}

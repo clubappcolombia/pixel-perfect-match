@@ -39,7 +39,9 @@ function doPost(e) {
         r.correo,
         'Tus documentos de ClubApp están listos',
         'Hola ' + r.nombre + ',\n\nTus documentos ya están listos. Descárgalos aquí:\n' + r.url_documento +
-          '\n\nTambién puedes consultarlos en ' + SITIO + '/mi-documento con tu correo y los 4 últimos dígitos de tu WhatsApp.' +
+          (SITIO.indexOf('TU-SITIO') === -1
+          ? '\n\nTambién puedes consultarlos en ' + SITIO + '/mi-documento con tu correo y los 4 últimos dígitos de tu WhatsApp.'
+          : '') +
           '\n\nRecuerda: ClubApp es una herramienta de apoyo documental; revisa los requisitos de tu instituto municipal de deportes.' +
           '\n\nClubApp Colombia',
         { name: 'ClubApp' }

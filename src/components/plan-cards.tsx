@@ -1,0 +1,93 @@
+import { Check } from "lucide-react";
+import { Button, ButtonLink, ButtonRoute, Card } from "@/components/ui-kit";
+import { CONFIG, WA_MESSAGES, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+
+const kit = [
+  "Un documento Word editable con los 10 formatos",
+  "Guía de diligenciamiento en PDF",
+  "Lista de chequeo",
+  "Acompañamiento por WhatsApp",
+];
+const profesional = [
+  "Todo lo del Kit",
+  "Asesoría personalizada",
+  "Revisión de información y documentos",
+  "Corrección de errores",
+  "Acompañamiento durante el proceso",
+];
+const premium = [
+  "Todo lo del Plan Profesional",
+  "Organización de la información",
+  "Elaboración de la documentación",
+  "Revisión integral y carpeta organizada",
+  "Documentación lista para radicar",
+];
+
+function List({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-5 flex-1 space-y-2 text-sm">
+      {items.map((i) => (
+        <li key={i} className="flex gap-2">
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+          {i}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Los tres planes, cada uno con su botón directo. */
+export function PlanCards({ origen, onElegirKit }: { origen: string; onElegirKit: () => void }) {
+  return (
+    <div id="planes" className="grid gap-5 pt-3 md:grid-cols-3">
+      <Card className="flex flex-col">
+        <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Kit de Formalización</p>
+        <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_KIT)}</p>
+        <p className="text-sm text-muted-foreground">Hazlo tú con ClubApp</p>
+        <List items={kit} />
+        <Button
+          className="mt-6"
+          onClick={() => {
+            trackEvent("ClickCTA", { cta: `${origen}_kit` });
+            onElegirKit();
+          }}
+        >
+          Elegir Kit
+        </Button>
+      </Card>
+
+      <Card className="relative flex flex-col border-primary/40 ring-2 ring-primary/30">
+        <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase text-primary-foreground">
+          Recomendado
+        </span>
+        <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Profesional</p>
+        <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PLAN)}</p>
+        <p className="text-sm text-muted-foreground">Hazlo acompañado por ClubApp</p>
+        <List items={profesional} />
+        <ButtonRoute
+          to="/plan-profesional"
+          className="mt-6"
+          onClick={() => trackEvent("ClickCTA", { cta: `${origen}_profesional` })}
+        >
+          Elegir Profesional
+        </ButtonRoute>
+      </Card>
+
+      <Card className="flex flex-col">
+        <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Premium</p>
+        <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PREMIUM)}</p>
+        <p className="text-sm text-muted-foreground">Nosotros lo hacemos por ti</p>
+        <List items={premium} />
+        <ButtonLink
+          href={whatsappLink(WA_MESSAGES.premium)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6"
+          onClick={() => trackEvent("ClickCTA", { cta: `${origen}_premium` })}
+        >
+          Elegir Premium
+        </ButtonLink>
+      </Card>
+    </div>
+  );
+}

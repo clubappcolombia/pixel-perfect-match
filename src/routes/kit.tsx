@@ -13,13 +13,13 @@ export const Route = createFileRoute("/kit")({
       {
         name: "description",
         content:
-          `10 documentos en Word editable, guía de diligenciamiento y lista de chequeo para formalizar tu club deportivo. Pago único de ${formatCOP(CONFIG.PRICE_KIT)} COP.`,
+          `Un documento Word editable con los 10 formatos, guía de diligenciamiento en PDF y lista de chequeo para formalizar tu club deportivo. Pago único de ${formatCOP(CONFIG.PRICE_KIT)} COP.`,
       },
       { property: "og:title", content: "Kit de Formalización — ClubApp" },
       {
         property: "og:description",
         content:
-          `Los 10 documentos que tu club necesita, en Word editable, con guía paso a paso. ${formatCOP(CONFIG.PRICE_KIT)} COP, pago único.`,
+          `Los 10 formatos que tu club necesita en un documento Word editable, con guía paso a paso en PDF. ${formatCOP(CONFIG.PRICE_KIT)} COP, pago único.`,
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: "¿En qué formato llegan los documentos?",
-    a: "En Word editable, para que los adaptes al nombre, la sede y los integrantes de tu club.",
+    a: "Los 10 formatos llegan en un solo documento Word editable, para que los adaptes al nombre, la sede y los integrantes de tu club. La guía de diligenciamiento llega en PDF.",
   },
   {
     q: "¿Sirve para cualquier municipio?",
@@ -118,7 +118,7 @@ function KitPage() {
               ))}
             </ul>
             <p className="mt-4 text-sm text-muted-foreground">
-              Todos en Word editable, más la guía de diligenciamiento.
+              Todos dentro de un documento Word editable, más la guía de diligenciamiento en PDF.
             </p>
           </Card>
         </div>

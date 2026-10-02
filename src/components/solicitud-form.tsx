@@ -25,6 +25,7 @@ export function SolicitudForm({
   const [autorizacion, setAutorizacion] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [loading, setLoading] = useState(false);
+  const [trampa, setTrampa] = useState(""); // campo oculto: los robots lo llenan, las personas no
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,13 +46,19 @@ export function SolicitudForm({
       whatsapp: result.data.whatsapp,
       correo: result.data.correo,
     };
-    await guardarSolicitud({ ...clean, producto });
+    if (!trampa) await guardarSolicitud({ ...clean, producto });
     setLoading(false);
     onSuccess(clean);
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate className="relative space-y-4">
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label>
+          No rellenar este campo
+          <input tabIndex={-1} autoComplete="off" value={trampa} onChange={(e) => setTrampa(e.target.value)} />
+        </label>
+      </div>
       <Field label="Nombre completo" error={errors.nombre}>
         <Input
           value={values.nombre}
@@ -92,7 +99,7 @@ export function SolicitudForm({
           />
           <span className="text-muted-foreground">
             Autorizo el tratamiento de mis datos para elaborar y entregar los documentos, según la{" "}
-            <Link to="/datos-personales" className="font-semibold text-primary underline">
+            <Link to="/datos-personales" className="font-semibold text-primary-text underline">
               política de tratamiento de datos
             </Link>{" "}
             (Ley 1581 de 2012).

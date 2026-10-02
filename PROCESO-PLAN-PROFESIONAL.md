@@ -22,7 +22,7 @@ En Supabase → SQL Editor → pega el contenido de `supabase/migrations/2026100
 1. Entra a script.google.com con la cuenta clubappcolombia@gmail.com → **Nuevo proyecto**.
 2. Pega el contenido de `apps-script/notificar.gs`. Cambia `TOKEN` por una clave larga inventada por ti y `SITIO` por tu enlace `.lovable.app`.
 3. **Implementar** → **Nueva implementación** → tipo **Aplicación web** → Ejecutar como: **Yo** → Acceso: **Cualquier persona** → **Implementar**. Autoriza los permisos y copia la URL.
-4. En Supabase → **Database** → **Webhooks** → **Create a new hook**: tabla `solicitudes`, eventos **Insert** y **Update**, tipo **HTTP Request**, método **POST**, URL = la URL de Apps Script + `?token=TU_TOKEN`.
+4. En Supabase → **Integrations** → busca **Database Webhooks** → **Install** (solo la primera vez) → pestaña **Webhooks** → **Create a new hook**: tabla `solicitudes`, eventos **Insert** y **Update**, tipo **HTTP Request**, método **POST**, URL = la URL de Apps Script + `?token=TU_TOKEN`.
 
 ## Rutina diaria (2 consultas en SQL Editor)
 
