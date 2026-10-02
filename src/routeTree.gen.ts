@@ -10,19 +10,32 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AyudaRouteImport } from './routes/ayuda'
 import { Route as DatosPersonalesRouteImport } from './routes/datos-personales'
+import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
 import { Route as KitRouteImport } from './routes/kit'
 import { Route as MiDocumentoRouteImport } from './routes/mi-documento'
 import { Route as PlanProfesionalRouteImport } from './routes/plan-profesional'
+import { Route as PlanesRouteImport } from './routes/planes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AyudaRoute = AyudaRouteImport.update({
+  id: '/ayuda',
+  path: '/ayuda',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DatosPersonalesRoute = DatosPersonalesRouteImport.update({
   id: '/datos-personales',
   path: '/datos-personales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagnosticoRoute = DiagnosticoRouteImport.update({
+  id: '/diagnostico',
+  path: '/diagnostico',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KitRoute = KitRouteImport.update({
@@ -40,50 +53,85 @@ const PlanProfesionalRoute = PlanProfesionalRouteImport.update({
   path: '/plan-profesional',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlanesRoute = PlanesRouteImport.update({
+  id: '/planes',
+  path: '/planes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
+  '/diagnostico': typeof DiagnosticoRoute
   '/kit': typeof KitRoute
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
+  '/planes': typeof PlanesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
+  '/diagnostico': typeof DiagnosticoRoute
   '/kit': typeof KitRoute
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
+  '/planes': typeof PlanesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
+  '/diagnostico': typeof DiagnosticoRoute
   '/kit': typeof KitRoute
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
+  '/planes': typeof PlanesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/datos-personales' | '/kit' | '/mi-documento' | '/plan-profesional'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/datos-personales' | '/kit' | '/mi-documento' | '/plan-profesional'
-  id:
-    | '__root__'
     | '/'
+    | '/ayuda'
     | '/datos-personales'
+    | '/diagnostico'
     | '/kit'
     | '/mi-documento'
     | '/plan-profesional'
+    | '/planes'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/ayuda'
+    | '/datos-personales'
+    | '/diagnostico'
+    | '/kit'
+    | '/mi-documento'
+    | '/plan-profesional'
+    | '/planes'
+  id:
+    | '__root__'
+    | '/'
+    | '/ayuda'
+    | '/datos-personales'
+    | '/diagnostico'
+    | '/kit'
+    | '/mi-documento'
+    | '/plan-profesional'
+    | '/planes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AyudaRoute: typeof AyudaRoute
   DatosPersonalesRoute: typeof DatosPersonalesRoute
+  DiagnosticoRoute: typeof DiagnosticoRoute
   KitRoute: typeof KitRoute
   MiDocumentoRoute: typeof MiDocumentoRoute
   PlanProfesionalRoute: typeof PlanProfesionalRoute
+  PlanesRoute: typeof PlanesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -95,11 +143,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ayuda': {
+      id: '/ayuda'
+      path: '/ayuda'
+      fullPath: '/ayuda'
+      preLoaderRoute: typeof AyudaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/datos-personales': {
       id: '/datos-personales'
       path: '/datos-personales'
       fullPath: '/datos-personales'
       preLoaderRoute: typeof DatosPersonalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnostico': {
+      id: '/diagnostico'
+      path: '/diagnostico'
+      fullPath: '/diagnostico'
+      preLoaderRoute: typeof DiagnosticoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kit': {
@@ -123,15 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanProfesionalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/planes': {
+      id: '/planes'
+      path: '/planes'
+      fullPath: '/planes'
+      preLoaderRoute: typeof PlanesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AyudaRoute: AyudaRoute,
   DatosPersonalesRoute: DatosPersonalesRoute,
+  DiagnosticoRoute: DiagnosticoRoute,
   KitRoute: KitRoute,
   MiDocumentoRoute: MiDocumentoRoute,
   PlanProfesionalRoute: PlanProfesionalRoute,
+  PlanesRoute: PlanesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

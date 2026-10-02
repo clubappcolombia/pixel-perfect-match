@@ -7,9 +7,10 @@ import { ButtonLink } from "./ui-kit";
 
 const links = [
   { to: "/", label: "Inicio" },
-  { to: "/kit", label: "Kit" },
-  { to: "/plan-profesional", label: "Plan Profesional" },
+  { to: "/diagnostico", label: "Diagnóstico" },
+  { to: "/planes", label: "Planes" },
   { to: "/mi-documento", label: "Mi documento" },
+  { to: "/ayuda", label: "Ayuda" },
 ] as const;
 
 export function SiteHeader() {
@@ -78,16 +79,6 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
-            <ButtonLink
-              href={whatsappLink(WA_MESSAGES.general)}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="primary"
-              className="my-3"
-              onClick={() => trackEvent("WhatsAppClick", { origen: "header_movil" })}
-            >
-              Escríbenos por WhatsApp
-            </ButtonLink>
           </div>
         </nav>
       ) : null}

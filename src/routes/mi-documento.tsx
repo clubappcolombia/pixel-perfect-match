@@ -24,23 +24,17 @@ function MiDocumento() {
   const [correo, setCorreo] = useState("");
   const [error, setError] = useState<string>();
   const [estado, setEstado] = useState<Estado>(null);
-  const [tel, setTel] = useState("");
-  const [errorTel, setErrorTel] = useState<string>();
   const [loading, setLoading] = useState(false);
 
   async function consultar(e: React.FormEvent) {
     e.preventDefault();
     const r = z.string().trim().email().max(255).safeParse(correo);
-    const t = z.string().trim().regex(/^\d{4}$/, "Escribe los 4 últimos dígitos").safeParse(tel);
-    setError(r.success ? undefined : "Correo no válido");
-    setErrorTel(t.success ? undefined : "Escribe los 4 últimos dígitos");
-    if (!r.success || !t.success) return;
+    if (!r.success) return setError("Correo no válido");
+    setError(undefined);
     setLoading(true);
     try {
       if (CONFIG.DOWNLOAD_ENDPOINT) {
-        const res = await fetch(
-          `${CONFIG.DOWNLOAD_ENDPOINT}?correo=${encodeURIComponent(r.data)}&tel=${encodeURIComponent(t.data)}`,
-        );
+        const res = await fetch(`${CONFIG.DOWNLOAD_ENDPOINT}?correo=${encodeURIComponent(r.data)}`);
         const data = (await res.json()) as { estado: string; url?: string };
         setEstado(
           data.estado === "entregado" && data.url
@@ -51,15 +45,7 @@ function MiDocumento() {
         );
       } else {
         const list = JSON.parse(localStorage.getItem("clubapp:solicitudes") ?? "[]") as Solicitud[];
-        setEstado(
-          list.some(
-            (s) =>
-              s.correo.toLowerCase() === r.data.toLowerCase() &&
-              s.whatsapp.replace(/\D/g, "").endsWith(t.data),
-          )
-            ? { tipo: "pendiente" }
-            : { tipo: "sin" },
-        );
+        setEstado(list.some((s) => s.correo.toLowerCase() === r.data.toLowerCase()) ? { tipo: "pendiente" } : { tipo: "sin" });
       }
     } catch {
       setEstado({ tipo: "pendiente" });
@@ -72,22 +58,11 @@ function MiDocumento() {
       <div className="container-page max-w-xl">
         <span className="eyebrow">Mi documento</span>
         <h1 className="mt-4 text-4xl">Consulta tu entrega</h1>
-        <p className="mt-3 text-muted-foreground">
-          Escribe el correo que usaste en tu solicitud y los 4 últimos dígitos de tu WhatsApp.
-        </p>
+        <p className="mt-3 text-muted-foreground">Escribe el correo que usaste en tu solicitud.</p>
         <Card className="mt-6">
           <form onSubmit={consultar} noValidate className="space-y-4">
             <Field label="Correo electrónico" error={error}>
               <Input type="email" value={correo} maxLength={255} onChange={(e) => setCorreo(e.target.value)} />
-            </Field>
-            <Field label="Últimos 4 dígitos de tu WhatsApp" error={errorTel}>
-              <Input
-                inputMode="numeric"
-                value={tel}
-                maxLength={4}
-                placeholder="1234"
-                onChange={(e) => setTel(e.target.value.replace(/\D/g, ""))}
-              />
             </Field>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Consultando…" : "Consultar"}

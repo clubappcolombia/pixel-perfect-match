@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Check, FileText, ShieldCheck, Clock, X } from "lucide-react";
 import hero from "@/assets/hero-coach.jpg";
 import { KitModal } from "@/components/kit-modal";
-import { Button, ButtonRoute, Card, SectionHeading, Steps } from "@/components/ui-kit";
+import { Button, ButtonRoute, Card } from "@/components/ui-kit";
 import { CONFIG, LEGAL_NOTICE, formatCOP, trackEvent } from "@/lib/config";
 
 export const Route = createFileRoute("/")({
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Kit de Formalización por $50.000 o Plan Profesional por $160.000: los documentos que tu club deportivo necesita para avanzar hacia el Reconocimiento Deportivo.",
+          "Kit de Formalización por $40.000 o Plan Profesional por $150.000: los documentos que tu club deportivo necesita para avanzar hacia el Reconocimiento Deportivo.",
       },
       { property: "og:title", content: "ClubApp — Tu club, en regla" },
       {
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 const comparacion = [
-  { label: "10 formatos en un documento Word editable", kit: true, plan: true },
+  { label: "10 documentos en Word editable", kit: true, plan: true },
   { label: "Guía de diligenciamiento y lista de chequeo", kit: true, plan: true },
   { label: "Tú diligencias los documentos", kit: true, plan: false },
   { label: "ClubApp diligencia por ti", kit: false, plan: true },
@@ -49,45 +49,53 @@ function Index() {
           <div>
             <span className="eyebrow">Tu club, en regla</span>
             <h1 className="mt-4 text-4xl md:text-5xl">
-              La documentación que tu club deportivo necesita, <span className="text-primary">lista</span>
+              Crea y formaliza tu club deportivo <span className="text-primary">sin perder tiempo</span>
             </h1>
             <p className="mt-4 max-w-xl text-lg text-navy-muted">
-              Entrenadores y líderes de club en Colombia usan ClubApp para organizar sus documentos y
-              avanzar hacia el Reconocimiento Deportivo, sin perderse entre requisitos.
+              Organiza la información de tu club, completa tu documentación y recibe acompañamiento
+              durante el proceso.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button
-                size="lg"
-                onClick={() => {
-                  trackEvent("ClickCTA", { cta: "hero_kit" });
-                  setModal(true);
-                }}
-              >
-                Comprar mi kit · {formatCOP(CONFIG.PRICE_KIT)}
-              </Button>
               <ButtonRoute
-                to="/plan-profesional"
+                to="/diagnostico"
+                size="lg"
+                onClick={() => trackEvent("ClickCTA", { cta: "hero_crear" })}
+              >
+                Crear mi club
+              </ButtonRoute>
+              <ButtonRoute
+                to="/planes"
                 variant="outline"
                 size="lg"
-                className="border-navy-foreground/40 bg-transparent text-navy-foreground hover:bg-navy-foreground/10"
+                className="bg-transparent text-navy-foreground hover:bg-navy-foreground/10"
                 onClick={() => trackEvent("ClickCTA", { cta: "hero_plan" })}
               >
-                Ver Plan Profesional
+                Ver planes
               </ButtonRoute>
             </div>
             <p className="mt-5 text-xs leading-relaxed text-navy-muted">{LEGAL_NOTICE}</p>
           </div>
 
-          <div className="relative">
-            <img
-              src={hero}
-              alt="Entrenador deportivo con la carpeta de documentos de su club"
-              width={1408}
-              height={1008}
-              fetchPriority="high"
-              className="w-full rounded-2xl object-cover shadow-lift"
-            />
-            <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-navy/35 via-transparent to-transparent" />
+          <img
+            src={hero}
+            alt="Entrenador deportivo con la carpeta de documentos de su club"
+            width={1408}
+            height={1008}
+            className="w-full rounded-2xl object-cover shadow-lift"
+          />
+        </div>
+      </section>
+
+      <section className="section pb-0">
+        <div className="container-page">
+          <span className="eyebrow">Más que formatos</span>
+          <h2 className="mt-3 max-w-2xl text-3xl md:text-4xl">Te acompañamos en todo el camino</h2>
+          <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-6">
+            {["Organización", "Documentación", "Automatización", "Acompañamiento", "Asesoría", "Seguimiento"].map((t) => (
+              <div key={t} className="rounded-xl border bg-card px-3 py-4 text-center text-sm font-semibold shadow-card">
+                {t}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -103,7 +111,7 @@ function Index() {
             {
               icon: ShieldCheck,
               title: "Formato aceptado",
-              text: "Plantillas en un documento Word editable, con guía en PDF paso a paso y lista de chequeo.",
+              text: "Plantillas en Word editable, con guía paso a paso y lista de chequeo.",
             },
             {
               icon: Clock,
@@ -111,7 +119,7 @@ function Index() {
               text: "Con el Plan Profesional entregamos en máximo 24 horas tras confirmar el pago.",
             },
           ].map((f) => (
-            <Card key={f.title} interactive>
+            <Card key={f.title}>
               <f.icon className="h-8 w-8 text-primary" />
               <h3 className="mt-4 text-lg">{f.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{f.text}</p>
@@ -122,9 +130,17 @@ function Index() {
 
       <section className="section bg-secondary">
         <div className="container-page">
-          <SectionHeading eyebrow="Elige tu camino" title="Kit de Formalización o Plan Profesional">
-            Ambos incluyen los mismos documentos. La diferencia está en quién los diligencia.
-          </SectionHeading>
+          <div className="max-w-2xl">
+            <span className="eyebrow">Elige tu camino</span>
+            <h2 className="mt-3 text-3xl md:text-4xl">Kit de Formalización o Plan Profesional</h2>
+            <p className="mt-2 text-sm">
+              ¿Prefieres que hagamos todo?{" "}
+              <Link to="/planes" className="font-semibold text-primary underline">Mira el Plan Premium</Link>.
+            </p>
+            <p className="mt-3 text-muted-foreground">
+              Ambos incluyen los mismos documentos. La diferencia está en quién los diligencia.
+            </p>
+          </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             <Card className="flex flex-col">
@@ -134,7 +150,7 @@ function Index() {
               <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_KIT)}</p>
               <p className="text-sm text-muted-foreground">Pago único · Autogestión</p>
               <p className="mt-4 flex-1 text-sm text-muted-foreground">
-                Recibes los 10 formatos en un documento Word editable, la guía de diligenciamiento en PDF y la lista de
+                Recibes los 10 documentos en Word, la guía de diligenciamiento y la lista de
                 chequeo. Tú los completas a tu ritmo.
               </p>
               <div className="mt-6 flex flex-col gap-2">
@@ -146,17 +162,14 @@ function Index() {
                 >
                   Comprar mi kit
                 </Button>
-                <Link to="/kit" className="text-center text-sm font-semibold text-primary-text underline">
+                <Link to="/kit" className="text-center text-sm font-semibold text-primary underline">
                   Ver qué incluye
                 </Link>
               </div>
             </Card>
 
-            <Card className="relative flex flex-col border-primary/40 bg-accent/30 ring-2 ring-primary/20">
-              <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground">
-                Lo hacemos por ti
-              </span>
-              <p className="text-sm font-bold uppercase tracking-widest text-primary-text">
+            <Card className="flex flex-col border-primary/40 ring-2 ring-primary/20">
+              <p className="text-sm font-bold uppercase tracking-widest text-primary">
                 Plan Profesional
               </p>
               <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PLAN)}</p>
@@ -185,9 +198,7 @@ function Index() {
                     Incluye
                   </th>
                   <th className="w-20 px-4 py-3 text-center font-display text-xs uppercase">Kit</th>
-                  <th className="w-20 bg-primary px-4 py-3 text-center font-display text-xs uppercase text-primary-foreground">
-                    Plan
-                  </th>
+                  <th className="w-20 px-4 py-3 text-center font-display text-xs uppercase">Plan</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,7 +208,7 @@ function Index() {
                     <td className="px-4 py-3 text-center">
                       <Mark on={row.kit} />
                     </td>
-                    <td className="bg-accent/40 px-4 py-3 text-center">
+                    <td className="px-4 py-3 text-center">
                       <Mark on={row.plan} />
                     </td>
                   </tr>
@@ -211,14 +222,19 @@ function Index() {
       <section className="section">
         <div className="container-page">
           <h2 className="text-3xl">¿Cómo funciona?</h2>
-          <Steps
-            items={[
+          <ol className="mt-6 grid gap-5 md:grid-cols-4">
+            {[
               "Eliges Kit o Plan y dejas tus datos.",
               "Coordinamos el pago por WhatsApp (transferencia o Nequi).",
               "Confirmamos tu comprobante en la cuenta.",
               "Recibes tus documentos por correo y en “Mi documento”.",
-            ]}
-          />
+            ].map((step, i) => (
+              <li key={step} className="rounded-2xl border bg-card p-5 shadow-card">
+                <span className="font-display text-3xl text-primary">{i + 1}</span>
+                <p className="mt-2 text-sm text-muted-foreground">{step}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
     </>
