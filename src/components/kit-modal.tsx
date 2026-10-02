@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { useState } from "react";
-import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, conDatos, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
 import { SolicitudForm } from "./solicitud-form";
 import { ButtonLink } from "./ui-kit";
 
@@ -12,7 +12,7 @@ export function KitModal({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const [enviado, setEnviado] = useState<{ nombre: string } | null>(null);
+  const [enviado, setEnviado] = useState<{ nombre: string; mensaje: string } | null>(null);
 
   return (
     <Dialog.Root
@@ -55,7 +55,7 @@ export function KitModal({
                 variant="whatsapp"
                 size="lg"
                 className="w-full"
-                href={whatsappLink(WA_MESSAGES.kit)}
+                href={whatsappLink(enviado.mensaje)}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("WhatsAppClick", { origen: "modal_kit" })}
@@ -73,7 +73,10 @@ export function KitModal({
                 submitLabel="Continuar por WhatsApp"
                 onSuccess={(data) => {
                   trackEvent("Lead", { producto: "Kit" });
-                  setEnviado({ nombre: data.nombre.split(" ")[0] ?? data.nombre });
+                  setEnviado({
+                    nombre: data.nombre.split(" ")[0] ?? data.nombre,
+                    mensaje: conDatos(WA_MESSAGES.kit, data),
+                  });
                 }}
               />
             </>

@@ -9,7 +9,7 @@ export const Route = createFileRoute("/planes")({
   head: () => ({
     meta: [
       { title: "Planes — ClubApp" },
-      { name: "description", content: "Básico $40.000, Profesional $150.000 o Premium $300.000 para formalizar tu club deportivo." },
+      { name: "description", content: `Básico ${formatCOP(CONFIG.PRICE_KIT)}, Profesional ${formatCOP(CONFIG.PRICE_PLAN)} o Premium ${formatCOP(CONFIG.PRICE_PREMIUM)} para formalizar tu club deportivo.` },
       { property: "og:title", content: "Planes de ClubApp" },
       { property: "og:description", content: "Hazlo tú, hazlo acompañado o déjanos hacerlo por ti." },
       { property: "og:type", content: "website" },

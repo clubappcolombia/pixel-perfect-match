@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Kit de Formalización por $40.000 o Plan Profesional por $150.000: los documentos que tu club deportivo necesita para avanzar hacia el Reconocimiento Deportivo.",
+          `Kit de Formalización por ${formatCOP(CONFIG.PRICE_KIT)} o Plan Profesional por ${formatCOP(CONFIG.PRICE_PLAN)}: los documentos que tu club deportivo necesita para avanzar hacia el Reconocimiento Deportivo.`,
       },
       { property: "og:title", content: "ClubApp — Tu club, en regla" },
       {

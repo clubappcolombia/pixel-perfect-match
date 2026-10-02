@@ -18,7 +18,7 @@ export const Route = createFileRoute("/mi-documento")({
   component: MiDocumento,
 });
 
-type Estado = { tipo: "pendiente" } | { tipo: "listo"; url: string } | { tipo: "sin" } | null;
+type Estado = { tipo: "pendiente" } | { tipo: "listo"; url: string } | { tipo: "sin" } | { tipo: "error" } | null;
 
 function MiDocumento() {
   const [correo, setCorreo] = useState("");
@@ -52,8 +52,10 @@ function MiDocumento() {
             ? { tipo: "listo", url: fila.url_documento }
             : { tipo: "pendiente" },
       );
-    } catch {
-      setEstado({ tipo: "pendiente" });
+    } catch (err) {
+      // Antes un fallo se mostraba como "en proceso" y ocultaba el problema real.
+      console.error("[ClubApp] Error al consultar la entrega:", err);
+      setEstado({ tipo: "error" });
     }
     setLoading(false);
   }
@@ -89,6 +91,14 @@ function MiDocumento() {
             <a href={estado.url} target="_blank" rel="noopener noreferrer" className="mt-5 block rounded-xl border border-success/30 bg-success/10 p-4 text-sm font-semibold">
               ¡Tus documentos están listos! Descargar
             </a>
+          )}
+          {estado?.tipo === "error" && (
+            <div className="mt-5 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm">
+              <p className="font-semibold">No pudimos consultar tu entrega en este momento.</p>
+              <p className="mt-1 text-muted-foreground">
+                Intenta de nuevo en unos minutos o escríbenos por WhatsApp.
+              </p>
+            </div>
           )}
           {estado?.tipo === "sin" && (
             <div className="mt-5 space-y-3 rounded-xl bg-secondary p-4 text-sm">
