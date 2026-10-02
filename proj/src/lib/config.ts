@@ -15,6 +15,8 @@ export const CONFIG = {
   PRICE_PLAN: 160000,
   PRICE_PREMIUM: 300000,
   EMAIL: "clubappcolombia@gmail.com",
+  /** Campo del correo en Google Forms (ej. "entry.123456789") para que el formulario llegue con el correo ya escrito. null = sin autocompletar. */
+  FORM_EMAIL_ENTRY: null as string | null,
   /** ID de Google Tag Manager (ej. "GTM-ABC1234"). null = sin analítica. */
   GTM_ID: null as string | null,
 } as const;
@@ -39,6 +41,14 @@ export const WA_MESSAGES = {
   diagnostico: "Hola, hice el diagnóstico en ClubApp y quiero asesoría.",
   general: "Hola, tengo una pregunta sobre ClubApp.",
 } as const;
+
+/** Enlace del formulario del club; si FORM_EMAIL_ENTRY está definido, abre con el correo del cliente ya escrito. */
+export function formUrl(correo?: string) {
+  const entry = CONFIG.FORM_EMAIL_ENTRY;
+  if (!entry || !/^entry\.\d+$/.test(entry) || !correo) return CONFIG.FORM_URL;
+  const sep = CONFIG.FORM_URL.includes("?") ? "&" : "?";
+  return `${CONFIG.FORM_URL}${sep}usp=pp_url&${entry}=${encodeURIComponent(correo)}`;
+}
 
 /** Agrega los datos del cliente al mensaje de WhatsApp para no perder el contacto si falla el guardado. */
 export function conDatos(base: string, d: { nombre: string; correo: string; whatsapp: string }) {
@@ -101,6 +111,26 @@ export async function guardarSolicitud(
   }
 
   return solicitud;
+}
+
+/** Avisa a Supabase en qué paso va el cliente del Plan Profesional (no cambia el estado: eso lo decides tú). */
+export async function registrarProgreso(
+  d: { correo: string; whatsapp: string },
+  evento: "formulario_completado" | "comprobante_enviado",
+) {
+  try {
+    const { supabase } = await import("@/integrations/supabase/client");
+    const whatsapp4 = d.whatsapp.replace(/\D/g, "").slice(-4);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any).rpc("registrar_progreso", {
+      p_correo: d.correo,
+      p_whatsapp4: whatsapp4,
+      p_evento: evento,
+    });
+    if (error) throw error;
+  } catch (err) {
+    console.error("[ClubApp] No se pudo registrar el progreso:", err);
+  }
 }
 
 export function trackEvent(name: string, payload?: Record<string, unknown>) {

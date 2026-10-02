@@ -2,8 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Check, ExternalLink } from "lucide-react";
 import { SolicitudForm, type SolicitudData } from "@/components/solicitud-form";
-import { Button, ButtonLink, Card } from "@/components/ui-kit";
-import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, conDatos, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
+import { Button, ButtonLink, ButtonRoute, Card } from "@/components/ui-kit";
+import {
+  CONFIG,
+  LEGAL_NOTICE,
+  WA_MESSAGES,
+  conDatos,
+  formUrl,
+  formatCOP,
+  registrarProgreso,
+  trackEvent,
+  whatsappLink,
+} from "@/lib/config";
 
 export const Route = createFileRoute("/plan-profesional")({
   head: () => ({
@@ -125,7 +135,7 @@ function PlanPage() {
                 </p>
                 <div className="mt-5 flex flex-col gap-3">
                   <ButtonLink
-                    href={CONFIG.FORM_URL}
+                    href={formUrl(p.datos?.correo)}
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="navy"
@@ -133,7 +143,13 @@ function PlanPage() {
                   >
                     Abrir formulario del club <ExternalLink className="h-4 w-4" />
                   </ButtonLink>
-                  <Button disabled={!p.formAbierto} onClick={() => update({ paso: 2 })}>
+                  <Button
+                    disabled={!p.formAbierto}
+                    onClick={() => {
+                      if (p.datos) void registrarProgreso(p.datos, "formulario_completado");
+                      update({ paso: 2 });
+                    }}
+                  >
                     Ya llené el formulario
                   </Button>
                 </div>
@@ -158,7 +174,13 @@ function PlanPage() {
                   >
                     Pagar por WhatsApp
                   </ButtonLink>
-                  <Button variant="outline" onClick={() => update({ comprobante: true, paso: 3 })}>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      if (p.datos) void registrarProgreso(p.datos, "comprobante_enviado");
+                      update({ comprobante: true, paso: 3 });
+                    }}
+                  >
                     Ya envié mi comprobante
                   </Button>
                 </div>
@@ -175,6 +197,9 @@ function PlanPage() {
                     horas en <strong>{p.datos?.correo}</strong> y en “Mi documento”.
                   </p>
                 </div>
+                <ButtonRoute to="/mi-documento" variant="outline" className="mt-5 w-full">
+                  Consultar el estado de mi entrega
+                </ButtonRoute>
                 <button
                   className="mt-5 text-sm font-semibold text-primary underline"
                   onClick={() => update(inicial)}
