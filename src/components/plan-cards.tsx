@@ -3,17 +3,16 @@ import { Button, ButtonRoute, Card } from "@/components/ui-kit";
 import { CONFIG, formatCOP, trackEvent } from "@/lib/config";
 
 const kit = [
-  "Un documento Word editable con los 10 formatos",
+  "Un solo documento Word editable con 10 documentos",
   "Guía de diligenciamiento en PDF",
-  "Lista de chequeo",
-  "Tú los llenas a tu ritmo",
+  "Tú llenas los documentos a tu ritmo",
   "Entrega apenas confirmamos tu pago",
 ];
 const profesional = [
-  "Todo lo del Kit",
-  "ClubApp diligencia los documentos con los datos de tu club",
-  "Asesoría personalizada",
-  "Revisión y corrección de errores",
+  "Tú nos das la información de tu club y de sus integrantes",
+  "ClubApp prepara y diligencia tus documentos",
+  "ClubApp revisa y organiza la documentación",
+  "Recibes tus documentos por correo y en “Mi documento”",
   "Entrega en máximo 24 horas tras confirmar el pago",
 ];
 const premium = [
@@ -45,7 +44,7 @@ export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (pro
       <Card className="flex flex-col">
         <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Kit de Formalización</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_KIT)}</p>
-        <p className="text-sm text-muted-foreground">Hazlo tú con ClubApp</p>
+        <p className="text-sm text-muted-foreground">Autoservicio: lo diligencias tú</p>
         <List items={kit} />
         <Button
           className="mt-6"
@@ -64,7 +63,7 @@ export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (pro
         </span>
         <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Profesional</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PLAN)}</p>
-        <p className="text-sm text-muted-foreground">Tú das los datos, nosotros diligenciamos</p>
+        <p className="text-sm text-muted-foreground">Servicio personalizado: nosotros lo hacemos por ti</p>
         <List items={profesional} />
         <ButtonRoute
           to="/plan-profesional"

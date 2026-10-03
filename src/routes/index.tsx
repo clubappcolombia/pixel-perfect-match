@@ -3,9 +3,11 @@ import { useState } from "react";
 import { FileText, ShieldCheck, Clock } from "lucide-react";
 import hero from "@/assets/hero-coach.jpg";
 import { KitModal } from "@/components/kit-modal";
+import { ComparacionKitPlan } from "@/components/comparacion-kit-plan";
 import { PlanCards } from "@/components/plan-cards";
 import { Card } from "@/components/ui-kit";
 import { CONFIG, LEGAL_NOTICE, formatCOP, trackEvent } from "@/lib/config";
+import { MEDIOS_PAGO } from "@/lib/oferta";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,7 +21,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Documentos listos para formalizar tu club deportivo en Colombia. Elige el Kit, el Plan Profesional o el Premium.",
+          "Documentos para formalizar tu club deportivo en Colombia. Hazlo tú con el Kit o deja que ClubApp prepare tu documentación.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -50,8 +52,8 @@ function Index() {
                 Crea y formaliza tu club deportivo <span className="text-primary">sin perder tiempo</span>
               </h1>
               <p className="mt-4 max-w-xl text-lg text-navy-muted">
-                Organiza la información de tu club, completa tu documentación y recibe acompañamiento
-                durante el proceso.
+                Hazlo tú con el Kit de Formalización o deja que ClubApp prepare, diligencie, revise y
+                organice tu documentación con la información de tu club.
               </p>
             </div>
 
@@ -89,14 +91,14 @@ function Index() {
 
       <section className="section pb-0">
         <div className="container-page">
-          <span className="eyebrow">Más que formatos</span>
-          <h2 className="mt-3 max-w-2xl text-3xl md:text-4xl">Te acompañamos en todo el camino</h2>
-          <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-6">
-            {["Organización", "Documentación", "Automatización", "Acompañamiento", "Asesoría", "Seguimiento"].map((t) => (
-              <div key={t} className="rounded-xl border bg-card px-3 py-4 text-center text-sm font-semibold shadow-card">
-                {t}
-              </div>
-            ))}
+          <span className="eyebrow">Kit o Plan Profesional</span>
+          <h2 className="mt-3 max-w-2xl text-3xl md:text-4xl">Dos formas distintas de hacerlo</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            El Kit es para quien quiere diligenciar por su cuenta. El Plan Profesional es para quien
+            prefiere entregarnos la información y delegar el trabajo.
+          </p>
+          <div className="mt-6">
+            <ComparacionKitPlan />
           </div>
         </div>
       </section>
@@ -112,12 +114,12 @@ function Index() {
             {
               icon: ShieldCheck,
               title: "Formatos organizados",
-              text: "Un documento Word editable con los 10 formatos, más la guía de diligenciamiento en PDF y la lista de chequeo.",
+              text: "En el Kit: un solo documento Word editable con los 10 documentos, más la guía de diligenciamiento en PDF.",
             },
             {
               icon: Clock,
               title: "Sin demoras",
-              text: "Coordinamos todo por WhatsApp y te entregamos tus documentos apenas confirmamos el pago.",
+              text: "Coordinamos todo por WhatsApp. El Kit llega apenas confirmamos tu pago; el Plan Profesional, en máximo 24 horas después de confirmarlo.",
             },
           ].map((f) => (
             <Card key={f.title}>
@@ -135,7 +137,7 @@ function Index() {
           <ol className="mt-6 grid gap-5 md:grid-cols-4">
             {[
               "Eliges tu plan y dejas tus datos.",
-              "Coordinamos el pago por WhatsApp (transferencia o Nequi).",
+              `Coordinamos el pago por WhatsApp (${MEDIOS_PAGO}).`,
               "Confirmamos tu comprobante en la cuenta.",
               "Recibes tus documentos por correo y en “Mi documento”.",
             ].map((step, i) => (

@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { KitModal } from "@/components/kit-modal";
+import { ComparacionKitPlan } from "@/components/comparacion-kit-plan";
 import { PlanCards } from "@/components/plan-cards";
 import { CONFIG, LEGAL_NOTICE, formatCOP } from "@/lib/config";
+import { MEDIOS_PAGO } from "@/lib/oferta";
 
 export const Route = createFileRoute("/planes")({
   head: () => ({
@@ -34,6 +36,17 @@ function Planes() {
         <h1 className="mt-3 text-4xl">Elige cómo quieres formalizar tu club</h1>
         <div className="mt-8">
           <PlanCards origen="planes" onElegir={setModal} />
+        </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Medios de pago: <strong>{MEDIOS_PAGO}</strong>. Coordinamos el pago por WhatsApp.
+        </p>
+        <h2 className="mt-12 text-3xl">Kit o Plan Profesional: ¿cuál te conviene?</h2>
+        <p className="mt-2 max-w-2xl text-muted-foreground">
+          El Kit es autoservicio: tú diligencias. El Plan Profesional es un servicio personalizado: tú nos das la
+          información y ClubApp prepara, diligencia, revisa y organiza tu documentación.
+        </p>
+        <div className="mt-6">
+          <ComparacionKitPlan />
         </div>
         <p className="mt-8 text-xs text-muted-foreground">
           ClubApp prepara la documentación; la decisión final corresponde a la autoridad deportiva. {LEGAL_NOTICE}

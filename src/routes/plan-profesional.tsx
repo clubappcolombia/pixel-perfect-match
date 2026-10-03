@@ -4,6 +4,7 @@ import { Check, ExternalLink } from "lucide-react";
 import { CodigoAcceso } from "@/components/codigo-acceso";
 import { SolicitudForm, type SolicitudData } from "@/components/solicitud-form";
 import { Button, ButtonLink, ButtonRoute, Card } from "@/components/ui-kit";
+import { INFO_PREVIA, MEDIOS_PAGO } from "@/lib/oferta";
 import {
   CONFIG,
   LEGAL_NOTICE,
@@ -23,12 +24,12 @@ export const Route = createFileRoute("/plan-profesional")({
       {
         name: "description",
         content:
-          `Nosotros diligenciamos la documentación de tu club deportivo y la entregamos en máximo 24 horas tras confirmar el pago. ${formatCOP(CONFIG.PRICE_PLAN)} COP.`,
+          `Servicio personalizado: ClubApp prepara, diligencia, revisa y organiza la documentación de tu club deportivo con la información que tú nos das. Entrega en máximo 24 horas tras confirmar el pago. ${formatCOP(CONFIG.PRICE_PLAN)} COP.`,
       },
       { property: "og:title", content: "Plan Profesional — ClubApp" },
       {
         property: "og:description",
-        content: "Entrega en 24 horas: ClubApp diligencia los documentos de tu club. Pago por WhatsApp.",
+        content: `ClubApp prepara y diligencia los documentos de tu club con tu información. Pago por ${MEDIOS_PAGO}.`,
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -92,7 +93,8 @@ function PlanPage() {
             Plan Profesional · <span className="text-primary">{formatCOP(CONFIG.PRICE_PLAN)}</span>
           </h1>
           <p className="mt-3 max-w-2xl text-lg text-navy-muted">
-            Nos das los datos del club y diligenciamos todo. Entrega en máximo 24 horas después de
+            Es un servicio personalizado: tú nos das la información de tu club y ClubApp prepara,
+            diligencia, revisa y organiza tu documentación. Entrega en máximo 24 horas después de
             confirmar tu pago.
           </p>
         </div>
@@ -131,6 +133,14 @@ function PlanPage() {
             {p.paso === 0 && (
               <>
                 <h2 className="text-2xl">Paso 1 · Tus datos</h2>
+                <div className="mt-3 rounded-xl border border-primary/30 bg-accent p-4 text-sm">
+                  <p className="font-semibold">Antes de empezar, ten a la mano:</p>
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-muted-foreground">
+                    {INFO_PREVIA.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
                 <p className="mb-4 mt-3 rounded-lg bg-secondary p-3 text-xs text-muted-foreground">
                   {LEGAL_NOTICE}
                 </p>
@@ -184,8 +194,9 @@ function PlanPage() {
               <>
                 <h2 className="text-2xl">Paso 3 · Pago por WhatsApp</h2>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Escríbenos por WhatsApp, te indicamos los medios de pago y nos envías el
-                  comprobante. Generamos tus documentos solo después de verificar el pago.
+                  Pagas por <strong>{MEDIOS_PAGO}</strong>. Escríbenos por WhatsApp, te damos los datos
+                  para pagar y nos envías el comprobante. Generamos tus documentos solo después de
+                  verificar el pago.
                 </p>
                 <div className="mt-5 flex flex-col gap-3">
                   <ButtonLink

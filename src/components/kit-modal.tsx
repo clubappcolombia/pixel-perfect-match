@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CONFIG, LEGAL_NOTICE, WA_MESSAGES, conDatos, formatCOP, trackEvent, whatsappLink } from "@/lib/config";
 import { CodigoAcceso } from "./codigo-acceso";
 import { SolicitudForm } from "./solicitud-form";
+import { MEDIOS_PAGO } from "@/lib/oferta";
 import { ButtonLink } from "./ui-kit";
 
 export function KitModal({
@@ -56,8 +57,8 @@ export function KitModal({
               <div className="rounded-xl border border-success/30 bg-success/10 p-4 text-sm">
                 <p className="font-semibold">¡Listo, {enviado.nombre}!</p>
                 <p className="mt-1 text-muted-foreground">
-                  Registramos tu solicitud. Continúa por WhatsApp: allí te indicamos los medios de
-                  pago y los siguientes pasos.
+                  Registramos tu solicitud. Continúa por WhatsApp: allí te damos los datos para pagar
+                  ({MEDIOS_PAGO}) y los siguientes pasos.
                 </p>
               </div>
               {enviado.codigo ? <CodigoAcceso codigo={enviado.codigo} /> : null}

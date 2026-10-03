@@ -5,6 +5,7 @@ import { ChevronDown, Check } from "lucide-react";
 import { KitModal } from "@/components/kit-modal";
 import { Button, ButtonRoute, Card } from "@/components/ui-kit";
 import { CONFIG, LEGAL_NOTICE, formatCOP, trackEvent } from "@/lib/config";
+import { INFO_PREVIA, MEDIOS_PAGO } from "@/lib/oferta";
 
 export const Route = createFileRoute("/kit")({
   head: () => ({
@@ -13,13 +14,13 @@ export const Route = createFileRoute("/kit")({
       {
         name: "description",
         content:
-          `Un documento Word editable con los 10 formatos, guía de diligenciamiento en PDF y lista de chequeo para formalizar tu club deportivo. Pago único de ${formatCOP(CONFIG.PRICE_KIT)} COP.`,
+          `Un solo documento Word editable con 10 documentos y guía de diligenciamiento en PDF para formalizar tu club deportivo. Pago único de ${formatCOP(CONFIG.PRICE_KIT)} COP.`,
       },
       { property: "og:title", content: "Kit de Formalización — ClubApp" },
       {
         property: "og:description",
         content:
-          `Los 10 formatos que tu club necesita en un documento Word editable, con guía paso a paso en PDF. ${formatCOP(CONFIG.PRICE_KIT)} COP, pago único.`,
+          `Los 10 documentos que tu club necesita en un solo Word editable, con guía paso a paso en PDF. ${formatCOP(CONFIG.PRICE_KIT)} COP, pago único.`,
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -48,11 +49,11 @@ const faqs = [
   },
   {
     q: "¿Cómo pago?",
-    a: "El pago se coordina por WhatsApp. Te indicamos los medios disponibles (transferencia o Nequi), envías el comprobante y al confirmarlo recibes el kit.",
+    a: `El pago se coordina por WhatsApp. Puedes pagar por ${MEDIOS_PAGO}: te damos los datos, envías el comprobante y al confirmarlo recibes el kit.`,
   },
   {
     q: "¿En qué formato llegan los documentos?",
-    a: "Los 10 formatos llegan en un solo documento Word editable, para que los adaptes al nombre, la sede y los integrantes de tu club. La guía de diligenciamiento llega en PDF.",
+    a: "Los 10 documentos llegan dentro de un solo archivo Word editable, para que los adaptes al nombre, la sede y los integrantes de tu club. La guía de diligenciamiento llega en PDF.",
   },
   {
     q: "¿Sirve para cualquier municipio?",
@@ -60,7 +61,11 @@ const faqs = [
   },
   {
     q: "¿Y si prefiero que ustedes lo diligencien?",
-    a: `Para eso está el Plan Profesional de ${formatCOP(CONFIG.PRICE_PLAN)}: tú entregas los datos y nosotros preparamos todo en máximo 24 horas.`,
+    a: `Para eso está el Plan Profesional de ${formatCOP(CONFIG.PRICE_PLAN)}, un servicio personalizado: tú nos das la información de tu club y ClubApp prepara, diligencia, revisa y organiza tu documentación. Entrega en máximo 24 horas tras confirmar el pago.`,
+  },
+  {
+    q: "¿Qué información necesito para llenar los documentos?",
+    a: INFO_PREVIA.slice(0, 2).join(" "),
   },
 ];
 
@@ -73,13 +78,13 @@ function KitPage() {
 
       <section className="surface-navy">
         <div className="container-page py-14 md:py-18">
-          <span className="eyebrow">Autogestión</span>
+          <span className="eyebrow">Autoservicio</span>
           <h1 className="mt-4 max-w-3xl text-4xl md:text-5xl">
             Deja de buscar formatos sueltos en internet
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-navy-muted">
             Reunimos en un solo kit los 10 documentos que piden para el Reconocimiento Deportivo,
-            con guía de diligenciamiento y lista de chequeo.
+            con guía de diligenciamiento en PDF.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button
@@ -154,8 +159,9 @@ function KitPage() {
             </ul>
             <h3 className="mt-8 text-xl">¿Prefieres delegarlo?</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Con el Plan Profesional ({formatCOP(CONFIG.PRICE_PLAN)}) nosotros diligenciamos y
-              entregamos en 24 horas tras confirmar el pago.
+              El Plan Profesional ({formatCOP(CONFIG.PRICE_PLAN)}) es un servicio personalizado: tú nos
+              das la información de tu club y ClubApp prepara, diligencia, revisa y organiza tu
+              documentación, con entrega en máximo 24 horas tras confirmar el pago.
             </p>
             <ButtonRoute to="/plan-profesional" variant="outline" className="mt-4">
               Ver el Plan Profesional
