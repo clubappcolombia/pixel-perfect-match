@@ -27,3 +27,28 @@
 - Pasarela de pago y panel de administración.
 - Regenerar tipos de Supabase (quitar los `as any`) y limpiar dependencias/componentes sin uso.
 - Cambiar `SITE_URL` y el sitemap cuando tengas dominio propio.
+
+---
+
+# Segunda revisión (análisis y mejoras)
+
+## Corregido
+- `analytics.ts`: 2 errores de TypeScript (`tsc --noEmit` ahora pasa limpio).
+- ~240 errores de formato (Prettier) en todo `src/`; `npm run lint` queda sin errores propios.
+- `.env.example` no existía aunque esta guía lo decía: creado.
+- «Mi documento»: el error del código aparecía bajo el campo del correo; ahora tiene su propio mensaje.
+- Se quitaron los `as any` de las llamadas RPC con `src/lib/rpc.ts` (tipado sin tocar `types.ts`, que genera Lovable).
+- Pie de página: faltaban enlaces a Planes, Diagnóstico y Ayuda. Diagnóstico: botón «Atrás».
+
+## Seguridad (ejecutar `20261007000000_endurecimiento.sql`)
+- `crear_solicitud` valida plan, largos, WhatsApp y rechaza nombres con enlaces/correos (evita usar tu Gmail para enviar phishing con el nombre como gancho).
+- Tope de 5 solicitudes por correo por hora; índice para el tope general.
+- `generar_codigo()` ya no es invocable desde la API pública.
+- Apps Script: se niega a funcionar con el token de ejemplo (antes cualquiera que conociera la URL podía enviar correos desde tu cuenta), captura errores, limpia el nombre y exige enlace https en la entrega.
+
+## Sigue pendiente (no se pudo resolver solo con código)
+- Captcha en servidor: el honeypot y la validación del cliente se saltan llamando a la API directamente.
+- Tope general de 60/hora: un atacante puede agotarlo y bloquear solicitudes legítimas durante una hora.
+- Bloqueo por correo en «Mi documento»: alguien puede bloquear 15 min a un cliente conocido enviando intentos fallidos con su correo.
+- `previewAuthStorage.ts` tiene 1 error de lint (`prefer-const`) pero es archivo generado por Lovable.
+- Dependencias sin usar (muchos `@radix-ui/*`, `recharts`, `react-day-picker`…): revisar antes de quitarlas.

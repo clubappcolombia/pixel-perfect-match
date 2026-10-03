@@ -19,6 +19,12 @@ export function SiteFooter() {
           <Link to="/" className="block text-navy-muted hover:text-primary">
             Inicio
           </Link>
+          <Link to="/planes" className="block text-navy-muted hover:text-primary">
+            Planes
+          </Link>
+          <Link to="/diagnostico" className="block text-navy-muted hover:text-primary">
+            Diagnóstico gratuito
+          </Link>
           <Link to="/kit" className="block text-navy-muted hover:text-primary">
             Kit de Formalización
           </Link>
@@ -27,6 +33,9 @@ export function SiteFooter() {
           </Link>
           <Link to="/mi-documento" className="block text-navy-muted hover:text-primary">
             Mi documento
+          </Link>
+          <Link to="/ayuda" className="block text-navy-muted hover:text-primary">
+            Ayuda
           </Link>
           <Link to="/datos-personales" className="block text-navy-muted hover:text-primary">
             Tratamiento de datos

@@ -28,7 +28,7 @@ export function loadAnalytics() {
   if (!id || !/^G-[A-Z0-9]+$/.test(id)) return;
   cargado = true;
 
-  const w = window as GtagWindow;
+  const w = window as unknown as GtagWindow;
   w[`ga-disable-${id}`] = false;
   w.dataLayer = w.dataLayer ?? [];
   w.gtag = function () {
@@ -55,6 +55,6 @@ export function setConsent(v: "si" | "no") {
   if (v === "si") {
     loadAnalytics();
   } else if (id && typeof window !== "undefined") {
-    (window as GtagWindow)[`ga-disable-${id}`] = true;
+    (window as unknown as GtagWindow)[`ga-disable-${id}`] = true;
   }
 }

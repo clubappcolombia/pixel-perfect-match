@@ -83,13 +83,17 @@ export async function guardarSolicitud(
   };
 
   try {
-    const { supabase } = await import("@/integrations/supabase/client");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: codigo, error } = await (supabase as any).rpc("crear_solicitud", {
+    const { rpc } = await import("@/lib/rpc");
+    const { data: codigo, error } = await rpc("crear_solicitud", {
       p_nombre: solicitud.nombre,
       p_correo: solicitud.correo,
       p_whatsapp: solicitud.whatsapp,
-      p_plan: solicitud.producto === "Kit" ? "kit" : solicitud.producto === "Premium" ? "premium" : "profesional",
+      p_plan:
+        solicitud.producto === "Kit"
+          ? "kit"
+          : solicitud.producto === "Premium"
+            ? "premium"
+            : "profesional",
     });
     // supabase-js NO lanza excepción cuando falla: devuelve { error }.
     if (error) throw error;
@@ -117,9 +121,8 @@ export async function registrarProgreso(
   // Sin código (solicitud guardada antes de esta versión o con fallo de guardado) no hay seguimiento.
   if (!d.codigo) return;
   try {
-    const { supabase } = await import("@/integrations/supabase/client");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase as any).rpc("registrar_progreso", {
+    const { rpc } = await import("@/lib/rpc");
+    const { error } = await rpc("registrar_progreso", {
       p_correo: d.correo,
       p_codigo: d.codigo,
       p_evento: evento,

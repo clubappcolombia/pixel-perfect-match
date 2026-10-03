@@ -1,24 +1,48 @@
-# Pixel Perfect Match
+# ClubApp Colombia
 
-Implement exactly the screenshot and nothing else
+Sitio para vender y entregar documentación de formalización de clubes deportivos (Kit, Plan Profesional y Premium).
+Pago y coordinación por WhatsApp; entrega por correo y en `/mi-documento`.
 
-This project was built with [Lovable](https://lovable.dev).
+**Stack:** TanStack Start (React 19, SSR) · Tailwind 4 · Supabase (Postgres + RPC) · Google Apps Script (correos) · Lovable.
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/65c878e1-0bdc-407e-8cbb-af92e9443965).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Desarrollo
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+cp .env.example .env     # completa con las claves públicas de Supabase
+npm install
+npm run dev              # servidor local
+npm run build            # compilación de producción
+npx tsc --noEmit         # tipos
+npm run lint             # eslint + prettier  (npm run format para autoformatear)
 ```
+
+## Estructura
+
+| Ruta / archivo                | Qué hace                                                      |
+| ----------------------------- | ------------------------------------------------------------- |
+| `src/lib/config.ts`           | Precios, WhatsApp, URLs, textos legales y guardado de leads   |
+| `src/lib/rpc.ts`              | Llamadas tipadas a las funciones SQL (sin `as any`)           |
+| `src/components/solicitud-form.tsx` | Formulario único (validación zod + honeypot)            |
+| `src/routes/*`                | Páginas: inicio, planes, kit, plan-profesional, mi-documento… |
+| `supabase/migrations/*.sql`   | Esquema, RLS, anti-spam, código de acceso, endurecimiento     |
+| `apps-script/notificar.gs`    | Webhook que envía los correos (a ti y al cliente)             |
+
+## Base de datos
+
+Ejecuta las migraciones **en orden** en Supabase → SQL Editor (todas son idempotentes):
+
+1. `20261002000000_solicitudes.sql`
+2. `20261003000000_plan_progreso.sql`
+3. `20261004000000_antispam.sql`
+4. `20261005000000_codigo_acceso.sql`
+5. `20261006000000_correcciones.sql`
+6. `20261007000000_endurecimiento.sql`
+
+La tabla `solicitudes` no tiene políticas RLS: el público solo accede por las funciones
+`crear_solicitud`, `consultar_entrega` y `registrar_progreso`.
+
+## Operación
+
+Ver `PROCESO-PLAN-PROFESIONAL.md` (configuración de correos y rutina diaria) y `CAMBIOS-REVISION.md`.
+
+> Lovable está conectado a este repositorio: no reescribas el historial publicado de `main`.
