@@ -37,7 +37,7 @@ export const WA_MESSAGES = {
   plan: `Hola, quiero el Plan Profesional (${formatCOP(CONFIG.PRICE_PLAN)}).`,
   planPago: `Hola, quiero pagar el Plan Profesional (${formatCOP(CONFIG.PRICE_PLAN)}). ¿Cuáles son los medios de pago?`,
   planComprobante: "Hola, ya envié mi comprobante de pago del Plan Profesional.",
-  premium: `Hola, quiero el Plan Premium (${formatCOP(CONFIG.PRICE_PREMIUM)}): que ClubApp haga todo por mí.`,
+  premium: `Hola, quiero el Plan Premium (${formatCOP(CONFIG.PRICE_PREMIUM)}): que ClubApp prepare y organice mi carpeta documental.`,
   diagnostico: "Hola, hice el diagnóstico en ClubApp y quiero asesoría.",
   general: "Hola, tengo una pregunta sobre ClubApp.",
 } as const;

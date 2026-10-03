@@ -77,11 +77,11 @@ function Diagnostico() {
               </h2>
               <p className="mt-3 text-sm text-muted-foreground">
                 {plan === "Kit" &&
-                  "Tu club ya está bien encaminado. Con los formatos y la guía puedes completarlo tú."}
+                  "Tu club ya está bien encaminado. Con los documentos y la guía puedes completarlo tú."}
                 {plan === "Profesional" &&
-                  "Tienes una base, pero te conviene revisión y acompañamiento para evitar errores."}
+                  "Tienes una base, pero te conviene que te ayudemos a diligenciar, revisar y organizar la documentación."}
                 {plan === "Premium" &&
-                  "Estás empezando. Lo mejor es que organicemos y elaboremos toda la documentación por ti."}
+                  "Estás empezando. Nos encargamos de preparar y organizar tu carpeta documental para que la recibas lista para presentar."}
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <ButtonRoute to="/planes" onClick={() => trackEvent("Diagnostico", { plan })}>

@@ -123,7 +123,7 @@ function Index() {
             {
               icon: Clock,
               title: "Sin demoras",
-              text: "Coordinamos todo por WhatsApp. El Kit llega apenas confirmamos tu pago; el Plan Profesional, en máximo 24 horas después de confirmarlo.",
+              text: "Coordinamos todo por WhatsApp. El Kit llega apenas confirmamos tu pago; el Plan Profesional, en máximo 24 horas después de confirmarlo; el Premium, según la información de tu club.",
             },
           ].map((f) => (
             <Card key={f.title}>
