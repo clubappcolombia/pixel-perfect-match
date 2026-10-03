@@ -38,6 +38,8 @@ export const Route = createFileRoute("/plan-profesional")({
 });
 
 const KEY = "clubapp:plan";
+/** Cuánto se recuerda el avance del cliente si cierra la pestaña (3 días). */
+const VIGENCIA_MS = 3 * 24 * 60 * 60 * 1000;
 const pasos = ["Tus datos", "Datos del club", "Pago por WhatsApp", "Entrega"];
 
 interface Progreso {
@@ -54,8 +56,15 @@ function PlanPage() {
 
   useEffect(() => {
     try {
-      const raw = sessionStorage.getItem(KEY);
-      if (raw) setP({ ...inicial, ...JSON.parse(raw) });
+      const raw = localStorage.getItem(KEY);
+      if (raw) {
+        const guardado = JSON.parse(raw) as { t?: number; v?: Partial<Progreso> };
+        if (guardado.v && typeof guardado.t === "number" && Date.now() - guardado.t < VIGENCIA_MS) {
+          setP({ ...inicial, ...guardado.v });
+        } else {
+          localStorage.removeItem(KEY);
+        }
+      }
     } catch {
       /* ignore */
     }
@@ -65,7 +74,8 @@ function PlanPage() {
     setP((prev) => {
       const v = { ...prev, ...next };
       try {
-        sessionStorage.setItem(KEY, JSON.stringify(v));
+        if (v.paso === 0 && !v.datos) localStorage.removeItem(KEY);
+        else localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), v }));
       } catch {
         /* ignore */
       }
@@ -110,6 +120,14 @@ function PlanPage() {
           </ol>
 
           <Card>
+            {(p.paso === 1 || p.paso === 2) && p.datos ? (
+              <p className="mb-4 rounded-lg bg-secondary p-3 text-xs text-muted-foreground">
+                Solicitud de <strong>{p.datos.nombre}</strong> ({p.datos.correo}).{" "}
+                <button className="font-semibold text-primary underline" onClick={() => update(inicial)}>
+                  ¿No eres tú? Empezar de nuevo
+                </button>
+              </p>
+            ) : null}
             {p.paso === 0 && (
               <>
                 <h2 className="text-2xl">Paso 1 · Tus datos</h2>
