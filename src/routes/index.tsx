@@ -4,6 +4,7 @@ import { FileText, ShieldCheck, Clock } from "lucide-react";
 import hero from "@/assets/hero-coach.jpg";
 import { KitModal } from "@/components/kit-modal";
 import { ComparacionKitPlan } from "@/components/comparacion-kit-plan";
+import { MuestraDocumentacion } from "@/components/muestra-documentacion";
 import { PlanCards } from "@/components/plan-cards";
 import { Card } from "@/components/ui-kit";
 import { CONFIG, LEGAL_NOTICE, formatCOP, trackEvent } from "@/lib/config";
@@ -91,17 +92,20 @@ function Index() {
 
       <section className="section pb-0">
         <div className="container-page">
-          <span className="eyebrow">Kit o Plan Profesional</span>
-          <h2 className="mt-3 max-w-2xl text-3xl md:text-4xl">Dos formas distintas de hacerlo</h2>
+          <span className="eyebrow">Kit, Profesional o Premium</span>
+          <h2 className="mt-3 max-w-2xl text-3xl md:text-4xl">Tres formas distintas de hacerlo</h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            El Kit es para quien quiere diligenciar por su cuenta. El Plan Profesional es para quien
-            prefiere entregarnos la información y delegar el trabajo.
+            El Kit es para quien quiere hacer el proceso por su cuenta. El Profesional, para quien prefiere
+            darnos la información y que lo ayudemos a diligenciar, revisar y organizar. El Premium, para quien
+            quiere recibir su carpeta documental organizada y lista para presentar.
           </p>
           <div className="mt-6">
             <ComparacionKitPlan />
           </div>
         </div>
       </section>
+
+      <MuestraDocumentacion />
 
       <section className="section">
         <div className="container-page grid gap-5 md:grid-cols-3">

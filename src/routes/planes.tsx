@@ -40,10 +40,11 @@ function Planes() {
         <p className="mt-4 text-sm text-muted-foreground">
           Medios de pago: <strong>{MEDIOS_PAGO}</strong>. Coordinamos el pago por WhatsApp.
         </p>
-        <h2 className="mt-12 text-3xl">Kit o Plan Profesional: ¿cuál te conviene?</h2>
+        <h2 className="mt-12 text-3xl">Kit, Profesional o Premium: ¿cuál te conviene?</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          El Kit es autoservicio: tú diligencias. El Plan Profesional es un servicio personalizado: tú nos das la
-          información y ClubApp prepara, diligencia, revisa y organiza tu documentación.
+          Kit: tú haces el proceso con nuestros documentos y guía. Profesional: te ayudamos a diligenciar, revisar y
+          organizar la documentación. Premium: nos encargamos de preparar y organizar tu carpeta documental para
+          entregártela lista para presentar.
         </p>
         <div className="mt-6">
           <ComparacionKitPlan />

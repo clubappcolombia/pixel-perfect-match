@@ -22,7 +22,7 @@ const faqs = [
   ["¿ClubApp garantiza la aprobación?", "No. Preparamos la documentación; la decisión corresponde a la autoridad deportiva."],
   ["¿Cómo pago?", `Coordinamos el pago por WhatsApp. Puedes pagar por ${MEDIOS_PAGO}. Al confirmarlo iniciamos tu proceso.`],
   ["¿Qué necesito tener a la mano?", INFO_PREVIA.join(" ")],
-  ["¿Qué incluye cada plan?", "Kit (autoservicio): un solo documento Word editable con 10 documentos y la guía de diligenciamiento en PDF; tú los llenas. Plan Profesional (servicio personalizado): tú nos das la información de tu club y ClubApp prepara, diligencia, revisa y organiza tu documentación. Premium: servicio completo con revisión integral y carpeta organizada para radicar."],
+  ["¿Qué incluye cada plan?", "Kit (autoservicio): un solo documento Word editable con 10 documentos y la guía de diligenciamiento en PDF; tú los llenas. Plan Profesional (servicio personalizado): tú nos das la información de tu club y ClubApp prepara, diligencia, revisa y organiza tu documentación. Premium: nos encargamos de preparar y organizar tu carpeta documental para que la recibas lista para presentar; la radicación la realizas tú."],
   ["¿Cuánto se demora?", "El Kit se entrega apenas confirmamos tu pago. El Plan Profesional, en máximo 24 horas después de confirmarlo. El Premium depende de la información de tu club."],
   ["¿Qué plan me conviene?", "Haz el diagnóstico gratuito: en un minuto te recomendamos el plan adecuado."],
   ["¿Dónde veo mis documentos?", "En la página “Mi documento”, con el correo que registraste y tu código de seguimiento (te lo mostramos al registrar la solicitud). También te llega un enlace por correo electrónico. Si perdiste el código, escríbenos por WhatsApp."],

@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { Button, ButtonRoute, Card } from "@/components/ui-kit";
 import { CONFIG, formatCOP, trackEvent } from "@/lib/config";
+import { FRASE_KIT, FRASE_PREMIUM, FRASE_PROFESIONAL } from "@/lib/oferta";
 
 const kit = [
   "Un solo documento Word editable con 10 documentos",
@@ -16,11 +17,10 @@ const profesional = [
   "Entrega en máximo 24 horas tras confirmar el pago",
 ];
 const premium = [
-  "Todo lo del Plan Profesional",
-  "Organización de la información",
-  "Elaboración de la documentación",
-  "Revisión integral y carpeta organizada",
-  "Documentación organizada para radicar",
+  "Tú nos das la información de tu club y de sus integrantes",
+  "ClubApp prepara y diligencia la documentación con esa información",
+  "Carpeta documental organizada",
+  "La recibes lista para presentar; la radicación la realizas tú",
   "Tiempo de entrega según la información de tu club",
 ];
 
@@ -44,7 +44,7 @@ export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (pro
       <Card className="flex flex-col">
         <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Kit de Formalización</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_KIT)}</p>
-        <p className="text-sm text-muted-foreground">Autoservicio: lo diligencias tú</p>
+        <p className="text-sm text-muted-foreground">{FRASE_KIT}</p>
         <List items={kit} />
         <Button
           className="mt-6"
@@ -63,7 +63,7 @@ export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (pro
         </span>
         <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Profesional</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PLAN)}</p>
-        <p className="text-sm text-muted-foreground">Servicio personalizado: nosotros lo hacemos por ti</p>
+        <p className="text-sm text-muted-foreground">{FRASE_PROFESIONAL}</p>
         <List items={profesional} />
         <ButtonRoute
           to="/plan-profesional"
@@ -77,7 +77,7 @@ export function PlanCards({ origen, onElegir }: { origen: string; onElegir: (pro
       <Card className="flex flex-col">
         <p className="text-sm font-bold uppercase tracking-widest text-primary-text">Plan Premium</p>
         <p className="mt-2 font-display text-4xl">{formatCOP(CONFIG.PRICE_PREMIUM)}</p>
-        <p className="text-sm text-muted-foreground">Servicio completo, carpeta organizada para radicar</p>
+        <p className="text-sm text-muted-foreground">{FRASE_PREMIUM}</p>
         <List items={premium} />
         <Button
           className="mt-6"
