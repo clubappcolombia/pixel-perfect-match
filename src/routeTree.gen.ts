@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AyudaRouteImport } from './routes/ayuda'
 import { Route as DatosPersonalesRouteImport } from './routes/datos-personales'
 import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
@@ -19,15 +21,26 @@ import { Route as KitRouteImport } from './routes/kit'
 import { Route as MiDocumentoRouteImport } from './routes/mi-documento'
 import { Route as PlanProfesionalRouteImport } from './routes/plan-profesional'
 import { Route as PlanesRouteImport } from './routes/planes'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedMiClubappRouteImport } from './routes/_authenticated/mi-clubapp'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AyudaRoute = AyudaRouteImport.update({
@@ -70,10 +83,21 @@ const PlanesRoute = PlanesRouteImport.update({
   path: '/planes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMiClubappRoute = AuthenticatedMiClubappRouteImport.update({
+  id: '/mi-clubapp',
+  path: '/mi-clubapp',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
   '/diagnostico': typeof DiagnosticoRoute
@@ -82,10 +106,13 @@ export interface FileRoutesByFullPath {
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
   '/planes': typeof PlanesRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/mi-clubapp': typeof AuthenticatedMiClubappRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
   '/diagnostico': typeof DiagnosticoRoute
@@ -94,11 +121,15 @@ export interface FileRoutesByTo {
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
   '/planes': typeof PlanesRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/mi-clubapp': typeof AuthenticatedMiClubappRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
   '/diagnostico': typeof DiagnosticoRoute
@@ -107,12 +138,15 @@ export interface FileRoutesById {
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
   '/planes': typeof PlanesRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/mi-clubapp': typeof AuthenticatedMiClubappRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/auth'
     | '/ayuda'
     | '/datos-personales'
     | '/diagnostico'
@@ -121,10 +155,13 @@ export interface FileRouteTypes {
     | '/mi-documento'
     | '/plan-profesional'
     | '/planes'
+    | '/reset-password'
+    | '/mi-clubapp'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/auth'
     | '/ayuda'
     | '/datos-personales'
     | '/diagnostico'
@@ -133,10 +170,14 @@ export interface FileRouteTypes {
     | '/mi-documento'
     | '/plan-profesional'
     | '/planes'
+    | '/reset-password'
+    | '/mi-clubapp'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/admin'
+    | '/auth'
     | '/ayuda'
     | '/datos-personales'
     | '/diagnostico'
@@ -145,11 +186,15 @@ export interface FileRouteTypes {
     | '/mi-documento'
     | '/plan-profesional'
     | '/planes'
+    | '/reset-password'
+    | '/_authenticated/mi-clubapp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AdminRoute: typeof AdminRoute
+  AuthRoute: typeof AuthRoute
   AyudaRoute: typeof AyudaRoute
   DatosPersonalesRoute: typeof DatosPersonalesRoute
   DiagnosticoRoute: typeof DiagnosticoRoute
@@ -158,6 +203,7 @@ export interface RootRouteChildren {
   MiDocumentoRoute: typeof MiDocumentoRoute
   PlanProfesionalRoute: typeof PlanProfesionalRoute
   PlanesRoute: typeof PlanesRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -169,11 +215,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ayuda': {
@@ -232,12 +292,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/mi-clubapp': {
+      id: '/_authenticated/mi-clubapp'
+      path: '/mi-clubapp'
+      fullPath: '/mi-clubapp'
+      preLoaderRoute: typeof AuthenticatedMiClubappRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMiClubappRoute: typeof AuthenticatedMiClubappRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMiClubappRoute: AuthenticatedMiClubappRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AdminRoute: AdminRoute,
+  AuthRoute: AuthRoute,
   AyudaRoute: AyudaRoute,
   DatosPersonalesRoute: DatosPersonalesRoute,
   DiagnosticoRoute: DiagnosticoRoute,
@@ -246,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   MiDocumentoRoute: MiDocumentoRoute,
   PlanProfesionalRoute: PlanProfesionalRoute,
   PlanesRoute: PlanesRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
