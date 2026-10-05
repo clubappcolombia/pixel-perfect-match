@@ -33,6 +33,17 @@ type Filtro = "cobrar" | "entregar" | "entregados" | "todos";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = supabase as any;
 
+/** Traduce el error de Supabase Auth para saber por qué falla el ingreso. */
+function mensajeLogin(msg: string) {
+  const m = (msg || "").toLowerCase();
+  if (m.includes("invalid login credentials")) return "Correo o contraseña incorrectos.";
+  if (m.includes("email not confirmed")) return "Tu correo no está confirmado en Supabase (Authentication → Users).";
+  if (m.includes("banned")) return "Este usuario está bloqueado en Supabase.";
+  if (m.includes("rate limit") || m.includes("too many")) return "Demasiados intentos. Espera unos minutos.";
+  if (m.includes("failed to fetch") || m.includes("network")) return "Sin conexión con el servidor. Revisa tu internet.";
+  return `No se pudo entrar: ${msg}`;
+}
+
 function fecha(v: string | null) {
   if (!v) return "";
   return new Date(v).toLocaleString("es-CO", {
@@ -195,10 +206,13 @@ function Admin() {
     const { data, error } = await db.rpc("admin_listar");
     if (error) {
       const msg = String(error.message ?? "");
+      console.error("[ClubApp] admin_listar falló:", error);
       setErrorLista(
         msg.includes("No autorizado")
-          ? "Tu usuario no tiene permiso de administrador."
-          : "No se pudo cargar la lista. Intenta de nuevo.",
+          ? "Tu usuario no tiene permiso de administrador (falta agregarlo en la tabla administradores)."
+          : msg.includes("Could not find the function") || error.code === "PGRST202"
+            ? "Falta ejecutar la migración 20261008000000_admin.sql en Supabase."
+            : `No se pudo cargar la lista: ${msg || "error desconocido"}`,
       );
       setFilas([]);
     } else {
@@ -216,7 +230,7 @@ function Admin() {
     setEntrando(true);
     setErrLogin(undefined);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password: clave });
-    if (error) setErrLogin("Correo o contraseña incorrectos.");
+    if (error) setErrLogin(mensajeLogin(error.message));
     setClave("");
     setEntrando(false);
   }
