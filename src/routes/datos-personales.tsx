@@ -29,14 +29,14 @@ function Datos() {
           ClubApp Colombia. Contacto para consultas y reclamos: {CONFIG.EMAIL} o por WhatsApp.
         </p>
         <h2 className="text-2xl text-foreground">Datos que recolectamos</h2>
-        <p>Nombre, WhatsApp, correo y, para el Plan Profesional y el Premium, datos del club y de sus integrantes (incluidas cédulas).</p>
+        <p>Nombre, WhatsApp, correo y, para el Plan Profesional y el Premium, datos del club y de sus integrantes (incluidas cédulas). Si descargas nuestra guía gratuita, también guardamos el enlace o red desde donde llegaste (por ejemplo, Instagram).</p>
         <h2 className="text-2xl text-foreground">Datos de menores de edad</h2>
         <p>
           Si entre los integrantes del club hay menores de edad, quien nos entrega sus datos declara contar con la autorización de sus
           representantes legales. Tratamos esos datos únicamente para elaborar los documentos del club y respetamos el interés superior del menor.
         </p>
         <h2 className="text-2xl text-foreground">Finalidad</h2>
-        <p>Únicamente elaborar y entregar los documentos solicitados y comunicarnos contigo sobre tu solicitud. No vendemos tus datos.</p>
+        <p>Elaborar y entregar los documentos solicitados, enviarte la guía gratuita y comunicarnos contigo sobre tu solicitud o para orientarte sobre los servicios de ClubApp. No vendemos tus datos.</p>
         <h2 className="text-2xl text-foreground">Proveedores y transmisión de datos</h2>
         <p>
           Para operar el servicio usamos proveedores tecnológicos (como Google y Supabase) que almacenan la información por encargo nuestro y
@@ -59,7 +59,7 @@ function Datos() {
           Atendemos las consultas en máximo 10 días hábiles y los reclamos en máximo 15 días hábiles, contados desde su recibo. Escríbenos a{" "}
           {CONFIG.EMAIL} indicando tu nombre y qué necesitas.
         </p>
-        <p className="text-sm">Última actualización: 2 de octubre de 2026.</p>
+        <p className="text-sm">Última actualización: 5 de octubre de 2026.</p>
       </div>
     </section>
   );

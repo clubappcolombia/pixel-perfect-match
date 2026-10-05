@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { FileText, ShieldCheck, Clock } from "lucide-react";
 import hero from "@/assets/hero-coach.jpg";
+import { GuiaBanner } from "@/components/guia-banner";
 import { KitModal } from "@/components/kit-modal";
 import { ComparacionKitPlan } from "@/components/comparacion-kit-plan";
 import { MuestraDocumentacion } from "@/components/muestra-documentacion";
@@ -74,6 +75,7 @@ function Index() {
             <div className="mt-4">
               <PlanCards origen="inicio" onElegir={setModal} />
             </div>
+            <GuiaBanner />
             <p className="mt-5 text-sm text-navy-muted">
               ¿No sabes cuál elegir?{" "}
               <Link

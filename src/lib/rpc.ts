@@ -37,6 +37,10 @@ interface RpcContrato {
     args: { p_correo: string; p_codigo: string };
     returns: EntregaFila[];
   };
+  crear_lead_guia: {
+    args: { p_nombre: string; p_correo: string; p_whatsapp: string; p_fuente: string };
+    returns: boolean;
+  };
 }
 
 export function rpc<K extends keyof RpcContrato>(

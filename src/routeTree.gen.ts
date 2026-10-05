@@ -10,9 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AyudaRouteImport } from './routes/ayuda'
 import { Route as DatosPersonalesRouteImport } from './routes/datos-personales'
 import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
+import { Route as GuiaGratisRouteImport } from './routes/guia-gratis'
 import { Route as KitRouteImport } from './routes/kit'
 import { Route as MiDocumentoRouteImport } from './routes/mi-documento'
 import { Route as PlanProfesionalRouteImport } from './routes/plan-profesional'
@@ -21,6 +23,11 @@ import { Route as PlanesRouteImport } from './routes/planes'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AyudaRoute = AyudaRouteImport.update({
@@ -36,6 +43,11 @@ const DatosPersonalesRoute = DatosPersonalesRouteImport.update({
 const DiagnosticoRoute = DiagnosticoRouteImport.update({
   id: '/diagnostico',
   path: '/diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuiaGratisRoute = GuiaGratisRouteImport.update({
+  id: '/guia-gratis',
+  path: '/guia-gratis',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KitRoute = KitRouteImport.update({
@@ -61,9 +73,11 @@ const PlanesRoute = PlanesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
   '/diagnostico': typeof DiagnosticoRoute
+  '/guia-gratis': typeof GuiaGratisRoute
   '/kit': typeof KitRoute
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
@@ -71,9 +85,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
   '/diagnostico': typeof DiagnosticoRoute
+  '/guia-gratis': typeof GuiaGratisRoute
   '/kit': typeof KitRoute
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
@@ -82,9 +98,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/ayuda': typeof AyudaRoute
   '/datos-personales': typeof DatosPersonalesRoute
   '/diagnostico': typeof DiagnosticoRoute
+  '/guia-gratis': typeof GuiaGratisRoute
   '/kit': typeof KitRoute
   '/mi-documento': typeof MiDocumentoRoute
   '/plan-profesional': typeof PlanProfesionalRoute
@@ -94,9 +112,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/ayuda'
     | '/datos-personales'
     | '/diagnostico'
+    | '/guia-gratis'
     | '/kit'
     | '/mi-documento'
     | '/plan-profesional'
@@ -104,9 +124,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/ayuda'
     | '/datos-personales'
     | '/diagnostico'
+    | '/guia-gratis'
     | '/kit'
     | '/mi-documento'
     | '/plan-profesional'
@@ -114,9 +136,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/ayuda'
     | '/datos-personales'
     | '/diagnostico'
+    | '/guia-gratis'
     | '/kit'
     | '/mi-documento'
     | '/plan-profesional'
@@ -125,9 +149,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AyudaRoute: typeof AyudaRoute
   DatosPersonalesRoute: typeof DatosPersonalesRoute
   DiagnosticoRoute: typeof DiagnosticoRoute
+  GuiaGratisRoute: typeof GuiaGratisRoute
   KitRoute: typeof KitRoute
   MiDocumentoRoute: typeof MiDocumentoRoute
   PlanProfesionalRoute: typeof PlanProfesionalRoute
@@ -141,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ayuda': {
@@ -162,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/diagnostico'
       fullPath: '/diagnostico'
       preLoaderRoute: typeof DiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guia-gratis': {
+      id: '/guia-gratis'
+      path: '/guia-gratis'
+      fullPath: '/guia-gratis'
+      preLoaderRoute: typeof GuiaGratisRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kit': {
@@ -197,9 +237,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AyudaRoute: AyudaRoute,
   DatosPersonalesRoute: DatosPersonalesRoute,
   DiagnosticoRoute: DiagnosticoRoute,
+  GuiaGratisRoute: GuiaGratisRoute,
   KitRoute: KitRoute,
   MiDocumentoRoute: MiDocumentoRoute,
   PlanProfesionalRoute: PlanProfesionalRoute,
