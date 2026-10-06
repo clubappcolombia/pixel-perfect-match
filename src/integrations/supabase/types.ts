@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      administradores: {
+        Row: {
+          user_id: string
+        }
+        Insert: {
+          user_id: string
+        }
+        Update: {
+          user_id?: string
+        }
+        Relationships: []
+      }
+      intentos_acceso: {
+        Row: {
+          correo: string
+          created_at: string
+          id: number
+        }
+        Insert: {
+          correo: string
+          created_at?: string
+          id?: never
+        }
+        Update: {
+          correo?: string
+          created_at?: string
+          id?: never
+        }
+        Relationships: []
+      }
+      leads_guia: {
+        Row: {
+          correo: string
+          created_at: string
+          fuente: string
+          id: string
+          nombre: string
+          whatsapp: string
+        }
+        Insert: {
+          correo: string
+          created_at?: string
+          fuente?: string
+          id?: string
+          nombre: string
+          whatsapp: string
+        }
+        Update: {
+          correo?: string
+          created_at?: string
+          fuente?: string
+          id?: string
+          nombre?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           club: string | null
@@ -41,12 +98,112 @@ export type Database = {
         }
         Relationships: []
       }
+      solicitudes: {
+        Row: {
+          codigo_acceso: string | null
+          comprobante_at: string | null
+          correo: string
+          creado_en: string
+          created_at: string
+          estado: string
+          formulario_at: string | null
+          id: string
+          nombre: string
+          plan: string
+          url_documento: string | null
+          whatsapp: string
+        }
+        Insert: {
+          codigo_acceso?: string | null
+          comprobante_at?: string | null
+          correo: string
+          creado_en?: string
+          created_at?: string
+          estado?: string
+          formulario_at?: string | null
+          id?: string
+          nombre: string
+          plan: string
+          url_documento?: string | null
+          whatsapp: string
+        }
+        Update: {
+          codigo_acceso?: string | null
+          comprobante_at?: string | null
+          correo?: string
+          creado_en?: string
+          created_at?: string
+          estado?: string
+          formulario_at?: string | null
+          id?: string
+          nombre?: string
+          plan?: string
+          url_documento?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_actualizar: {
+        Args: { p_estado: string; p_id: string; p_url?: string }
+        Returns: boolean
+      }
+      admin_eliminar: { Args: { p_id: string }; Returns: boolean }
+      admin_listar: {
+        Args: never
+        Returns: {
+          codigo_acceso: string
+          comprobante_at: string
+          correo: string
+          creado_en: string
+          estado: string
+          formulario_at: string
+          id: string
+          nombre: string
+          plan: string
+          url_documento: string
+          whatsapp: string
+        }[]
+      }
+      consultar_entrega: {
+        Args: { p_codigo: string; p_correo: string }
+        Returns: {
+          comprobante_at: string
+          estado: string
+          formulario_at: string
+          plan: string
+          url_documento: string
+        }[]
+      }
+      crear_lead_guia: {
+        Args: {
+          p_correo: string
+          p_fuente: string
+          p_nombre: string
+          p_whatsapp: string
+        }
+        Returns: boolean
+      }
+      crear_solicitud: {
+        Args: {
+          p_correo: string
+          p_nombre: string
+          p_plan: string
+          p_whatsapp: string
+        }
+        Returns: string
+      }
+      es_admin: { Args: never; Returns: boolean }
+      frenar_intentos: { Args: { p_correo: string }; Returns: undefined }
+      generar_codigo: { Args: never; Returns: string }
+      registrar_progreso: {
+        Args: { p_codigo: string; p_correo: string; p_evento: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
