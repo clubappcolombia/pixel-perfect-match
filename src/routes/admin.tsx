@@ -27,7 +27,16 @@ type Fila = {
   comprobante_at: string | null;
 };
 
-type Filtro = "cobrar" | "entregar" | "entregados" | "todos";
+type Lead = {
+  id: string;
+  created_at: string;
+  nombre: string;
+  correo: string;
+  whatsapp: string;
+  fuente: string;
+};
+
+type Filtro = "cobrar" | "entregar" | "entregados" | "todos" | "guia";
 
 // El cliente de Supabase aún no conoce las funciones nuevas, por eso se usa "any".
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,6 +67,25 @@ function enlaceWhatsApp(f: Fila) {
   if (tel.length === 10) tel = "57" + tel;
   const msg = `Hola ${f.nombre}, te escribimos de ClubApp sobre tu solicitud.`;
   return `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
+}
+
+function enlaceWhatsAppLead(l: Lead) {
+  let tel = (l.whatsapp || "").replace(/\D/g, "");
+  if (tel.length === 10) tel = "57" + tel;
+  const msg = `Hola ${l.nombre.split(" ")[0]}, te escribimos de ClubApp. ¿Pudiste revisar la guía gratuita?`;
+  return `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
+}
+
+function descargarCsv(leads: Lead[]) {
+  const celda = (v: string) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const filas = [["Fecha", "Nombre", "Correo", "WhatsApp", "Fuente"], ...leads.map((l) => [fecha(l.created_at), l.nombre, l.correo, l.whatsapp, l.fuente])];
+  const csv = "\uFEFF" + filas.map((r) => r.map(celda).join(",")).join("\n");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `guia-gratis-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function Paso({ hecho, texto, detalle }: { hecho: boolean; texto: string; detalle?: string }) {
@@ -193,6 +221,8 @@ function Admin() {
   const [aviso, setAviso] = useState<string>();
   const [ocupado, setOcupado] = useState(false);
   const [filtro, setFiltro] = useState<Filtro>("cobrar");
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [errorLeads, setErrorLeads] = useState<string>();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSesion(data.session ? "dentro" : "fuera"));
@@ -221,9 +251,44 @@ function Admin() {
     setCargando(false);
   }, []);
 
+  const cargarLeads = useCallback(async () => {
+    setErrorLeads(undefined);
+    const { data, error } = await db.rpc("admin_listar_leads");
+    if (error) {
+      const msg = String(error.message ?? "");
+      console.error("[ClubApp] admin_listar_leads falló:", error);
+      setErrorLeads(
+        msg.includes("No autorizado")
+          ? "Tu usuario no tiene permiso de administrador."
+          : msg.includes("Could not find the function") || error.code === "PGRST202"
+            ? "Falta ejecutar en Supabase el SQL de la guía gratis (supabase/TODO-EN-UNO.sql)."
+            : `No se pudo cargar la guía gratis: ${msg || "error desconocido"}`,
+      );
+      setLeads([]);
+    } else {
+      setLeads((data ?? []) as Lead[]);
+    }
+  }, []);
+
   useEffect(() => {
-    if (sesion === "dentro") void cargar();
-  }, [sesion, cargar]);
+    if (sesion === "dentro") {
+      void cargar();
+      void cargarLeads();
+    }
+  }, [sesion, cargar, cargarLeads]);
+
+  async function eliminarLead(l: Lead) {
+    if (!window.confirm(`¿Eliminar el registro de ${l.nombre}? Esto no se puede deshacer.`)) return;
+    setOcupado(true);
+    setAviso(undefined);
+    const { error } = await db.rpc("admin_eliminar_lead", { p_id: l.id });
+    if (error) setAviso("No se pudo eliminar: " + String(error.message ?? "error"));
+    else {
+      setAviso("Registro eliminado.");
+      await cargarLeads();
+    }
+    setOcupado(false);
+  }
 
   async function entrar(e: React.FormEvent) {
     e.preventDefault();
@@ -280,6 +345,7 @@ function Admin() {
     if (filtro === "cobrar") return filas.filter((f) => f.estado === "solicitado");
     if (filtro === "entregar") return filas.filter((f) => f.estado === "pago confirmado");
     if (filtro === "entregados") return filas.filter((f) => f.estado === "entregado");
+    if (filtro === "guia") return [];
     return filas;
   }, [filas, filtro]);
 
@@ -288,6 +354,7 @@ function Admin() {
     { id: "entregar", label: `Por entregar (${cuenta.entregar})` },
     { id: "entregados", label: `Entregados (${cuenta.entregados})` },
     { id: "todos", label: `Todos (${cuenta.todos})` },
+    { id: "guia", label: `Guía gratis (${leads.length})` },
   ];
 
   if (sesion === "cargando") {
@@ -334,7 +401,7 @@ function Admin() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-3xl">Panel ClubApp</h1>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => void cargar()} disabled={cargando}>
+            <Button size="sm" variant="outline" onClick={() => { void cargar(); void cargarLeads(); }} disabled={cargando}>
               {cargando ? "Actualizando…" : "Actualizar"}
             </Button>
             <Button size="sm" variant="ghost" onClick={() => void salir()}>
@@ -354,7 +421,47 @@ function Admin() {
         {aviso && <p className="mt-4 rounded-lg bg-accent p-3 text-sm font-semibold">{aviso}</p>}
         {errorLista && <p className="mt-4 rounded-lg bg-destructive/10 p-3 text-sm font-semibold">{errorLista}</p>}
 
-        <div className="mt-5 space-y-4">
+        {filtro === "guia" ? (
+          <div className="mt-5 space-y-3">
+            {errorLeads && <p className="rounded-lg bg-destructive/10 p-3 text-sm font-semibold">{errorLeads}</p>}
+            {!errorLeads && leads.length === 0 && <p className="text-muted-foreground">Aún no hay registros de la guía gratis.</p>}
+            {leads.length > 0 && (
+              <Button size="sm" variant="outline" onClick={() => descargarCsv(leads)}>
+                Descargar Excel (CSV)
+              </Button>
+            )}
+            {leads.map((l) => (
+              <Card key={l.id} className="space-y-3 p-4">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <p className="font-bold">{l.nombre}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {l.correo} · {l.whatsapp}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {fecha(l.created_at)} · origen: {l.fuente}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <a
+                      href={enlaceWhatsAppLead(l)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-9 items-center rounded-lg bg-success px-3 text-sm font-semibold text-success-foreground"
+                    >
+                      WhatsApp
+                    </a>
+                    <Button size="sm" variant="ghost" disabled={ocupado} onClick={() => void eliminarLead(l)}>
+                      Eliminar
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : null}
+
+        <div className={filtro === "guia" ? "hidden" : "mt-5 space-y-4"}>
           {!cargando && !errorLista && visibles.length === 0 && (
             <p className="text-muted-foreground">No hay solicitudes en esta lista.</p>
           )}
