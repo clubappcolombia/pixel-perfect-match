@@ -43,6 +43,16 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {ready ? (
+            <ButtonRoute
+              to={session ? "/mi-clubapp" : "/auth"}
+              variant="outline"
+              size="sm"
+              className="hidden sm:inline-flex"
+            >
+              {session ? "Mi ClubApp" : "Ingresar"}
+            </ButtonRoute>
+          ) : null}
           <ButtonLink
             href={whatsappLink(WA_MESSAGES.general)}
             target="_blank"
@@ -81,6 +91,15 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
+            {ready ? (
+              <Link
+                to={session ? "/mi-clubapp" : "/auth"}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-1 py-3 text-base font-semibold text-primary"
+              >
+                {session ? "Mi ClubApp" : "Ingresar o crear cuenta"}
+              </Link>
+            ) : null}
             <ButtonLink
               href={whatsappLink(WA_MESSAGES.general)}
               target="_blank"
