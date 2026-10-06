@@ -3,7 +3,8 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import logo from "@/assets/clubapp-logo.asset.json";
 import { WA_MESSAGES, whatsappLink, trackEvent } from "@/lib/config";
-import { ButtonLink } from "./ui-kit";
+import { useSession } from "@/hooks/use-session";
+import { ButtonLink, ButtonRoute } from "./ui-kit";
 
 const links = [
   { to: "/", label: "Inicio" },
