@@ -16,6 +16,7 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { session, ready } = useSession();
 
   return (
     <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur">
